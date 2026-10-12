@@ -155,6 +155,13 @@
 .drawer {
   position: fixed;
   inset: var(--header-h) 0 0;
+  /* The header carries a `backdrop-filter`, which makes it the containing block
+     for its `position: fixed` descendants. So `inset` alone resolves against the
+     header's own box instead of the viewport and the drawer collapses to its
+     padding, hiding every destination below the first one. An explicit height is
+     what pins it to the real viewport, on every route and in both header states. */
+  height: calc(100vh - var(--header-h));
+  height: calc(100dvh - var(--header-h));
   z-index: 39;
   display: flex;
   flex-direction: column;
