@@ -1,0 +1,158 @@
+/* The enquiry form. It sits on a light sage panel dropped onto the deepest
+   green, so every control is a light surface on dark — legible without any
+   inversion tricks. */
+
+.form {
+  display: grid;
+  gap: var(--space-m);
+}
+
+.row {
+  display: grid;
+  gap: var(--space-m);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 34rem) {
+  .row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.field {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.label {
+  font-size: var(--step--1);
+  font-weight: 600;
+  font-stretch: 92%;
+  color: var(--botanic-900);
+}
+
+.optional {
+  font-weight: 400;
+  color: var(--text-soft);
+}
+
+.control {
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-m);
+  background: var(--sage-50);
+  color: var(--botanic-950);
+  transition: border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out), background-color var(--dur-fast) var(--ease-out);
+}
+
+.control:hover {
+  border-color: var(--botanic-600);
+}
+
+.control:focus-visible {
+  outline: 2.5px solid var(--leaf-500);
+  outline-offset: 1px;
+  border-color: var(--botanic-600);
+  background: #fff;
+}
+
+textarea.control {
+  min-height: 8.5rem;
+  resize: vertical;
+  line-height: 1.55;
+}
+
+/* Invalid state uses a maroon-red rather than the terracotta the old palette
+   carried, so it stays distinct from every brand green on the page. */
+.invalid {
+  border-color: #a8321f;
+  background: #fdf3f1;
+}
+
+.hint {
+  font-size: var(--step--1);
+  color: var(--text-soft);
+}
+
+.error {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.35rem;
+  font-size: var(--step--1);
+  font-weight: 500;
+  color: #8f2a19;
+}
+
+.consentRow {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.6rem;
+  align-items: start;
+}
+
+.checkbox {
+  width: 1.15rem;
+  height: 1.15rem;
+  margin-top: 0.28rem;
+  accent-color: var(--botanic-700);
+  flex: none;
+}
+
+.summary {
+  padding: var(--space-m);
+  border: 1px solid #a8321f;
+  border-left-width: 4px;
+  border-radius: var(--radius-m);
+  background: #fdf3f1;
+}
+
+.summaryTitle {
+  font-weight: 700;
+  color: #8f2a19;
+  margin-bottom: var(--space-2xs);
+}
+
+.summaryList {
+  display: grid;
+  gap: 0.25rem;
+  font-size: var(--step--1);
+}
+
+.status {
+  margin-bottom: var(--space-m);
+  padding: var(--space-m);
+  border: 1px solid var(--botanic-600);
+  border-left: 4px solid var(--botanic-600);
+  border-radius: var(--radius-m);
+  background: var(--sage-200);
+  color: var(--botanic-900);
+}
+
+.statusTitle {
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-top: var(--space-2xs);
+}
+
+.contactNote {
+  margin-top: var(--space-l);
+  padding-top: var(--space-s);
+  border-top: 1px solid var(--line);
+  font-size: var(--step--1);
+  line-height: 1.55;
+  color: var(--text-soft);
+  max-width: 52ch;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .control { transition: none; }
+}

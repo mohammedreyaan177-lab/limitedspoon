@@ -1,0 +1,676 @@
+/* ==========================================================================
+   Shared page furniture.
+
+   The five routes deliberately do NOT share a hero. Home owns the full-bleed
+   glass; Approach is airy and light; Care is a deep-green index; About is
+   cream editorial; Contact is a deep/sage split. Only the container, kicker
+   and surface primitives are shared.
+   ========================================================================== */
+
+/* ------------------------------------------------- Approach: light + airy */
+
+.heroLight {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 90% at 12% 0%, var(--sage-200), transparent 62%),
+    linear-gradient(168deg, var(--sage-100), var(--sage-50) 58%, var(--sage-200));
+  border-bottom: 1px solid var(--line);
+  padding-block: var(--space-2xl) var(--space-xl);
+}
+
+.heroLightInner {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: var(--space-l) var(--space-2xl);
+  grid-template-columns: 1fr;
+  align-items: end;
+}
+
+@media (min-width: 62rem) {
+  .heroLightInner { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+}
+
+.heroLightArt {
+  position: absolute;
+  right: -6%;
+  top: 50%;
+  translate: 0 -50%;
+  width: min(46%, 24rem);
+  color: var(--botanic-600);
+  opacity: 0.14;
+  pointer-events: none;
+}
+
+.pageTitle {
+  font-size: var(--step-4);
+  font-weight: 400;
+  color: var(--botanic-900);
+  max-width: 16ch;
+}
+
+.pageIntro {
+  margin-top: var(--space-s);
+  font-size: var(--step-1);
+  line-height: 1.5;
+  color: var(--text-muted);
+  max-width: 42ch;
+}
+
+.pageIntroStrong {
+  margin-top: var(--space-m);
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  font-style: italic;
+  color: var(--botanic-700);
+  max-width: 22ch;
+  margin-bottom: var(--space-s);
+}
+
+/* ------------------------------------------- Care: deep-green index page */
+
+.careHero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--botanic-900);
+  color: var(--text-on-deep);
+  padding-block: var(--space-2xl);
+}
+
+.careHero h1 { color: var(--sage-50); }
+
+.careHeroInner {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: var(--space-l) var(--space-2xl);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 62rem) {
+  .careHeroInner { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); }
+}
+
+.careIntro {
+  font-size: var(--step-1);
+  line-height: 1.55;
+  color: var(--sage-300);
+  max-width: 48ch;
+}
+
+.careIntro + p {
+  margin-top: var(--space-s);
+  color: color-mix(in srgb, var(--sage-300) 82%, transparent);
+}
+
+/* Jump links, rendered as leaf pills rather than generic chips */
+.jumpNav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs);
+  margin-top: var(--space-l);
+}
+
+.jumpItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--leaf-400) 38%, transparent);
+  border-radius: var(--radius-pill);
+  font-size: var(--step--1);
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--sage-200);
+  background: color-mix(in srgb, var(--leaf-400) 9%, transparent);
+  transition: background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+
+.jumpItem:hover {
+  background: color-mix(in srgb, var(--leaf-400) 22%, transparent);
+  border-color: var(--leaf-400);
+  color: var(--sage-50);
+}
+
+/* Detail rows alternate between two greens so the list has rhythm.
+   The left column carries the produce cluster — previously that whole column
+   was empty, with the title alone in it. */
+.detail {
+  display: grid;
+  gap: var(--space-m) var(--space-xl);
+  grid-template-columns: 1fr;
+  padding-block: var(--space-l);
+  /* offset anchor target so a hash jump does not land under the header */
+  scroll-margin-top: calc(var(--header-h) + 1.5rem);
+  align-items: center;
+}
+
+@media (min-width: 56rem) {
+  .detail {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 6fr);
+    gap: var(--space-l);
+    align-items: center;
+  }
+}
+
+.detailAlt {
+  background: var(--sage-100);
+}
+
+.detailHead {
+  position: relative;
+  display: grid;
+  gap: var(--space-s);
+  align-items: center;
+  grid-template-columns: 8.5rem minmax(0, 1fr);
+}
+
+@media (min-width: 72rem) {
+  .detailHead {
+    grid-template-columns: 10rem minmax(0, 1fr);
+  }
+}
+
+/* The produce cluster sits in its own well so it reads as art-directed
+   composition rather than floating icons. */
+.artWell {
+  position: relative;
+  aspect-ratio: 1;
+  width: 100%;
+  border-radius: var(--radius-l);
+  background:
+    radial-gradient(120% 100% at 26% 18%, rgba(255, 255, 255, 0.85), transparent 62%),
+    linear-gradient(155deg, var(--sage-200), var(--sage-300));
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.artCluster {
+  position: absolute;
+  inset: 0;
+}
+
+/* On very narrow screens the well goes full-width so it never squeezes the
+   title into a two-character column. */
+@media (max-width: 40rem) {
+  .detailHead {
+    grid-template-columns: 1fr;
+  }
+  .artWell {
+    max-width: 8.5rem;
+  }
+}
+
+.detailTitle {
+  font-size: var(--step-2);
+  color: var(--botanic-900);
+  max-width: 12ch;
+}
+
+.detailSummary {
+  font-size: var(--step-1);
+  color: var(--botanic-900);
+  max-width: 46ch;
+}
+
+.detailMark {
+  display: none;
+  color: var(--leaf-500);
+  opacity: 0.5;
+  margin-bottom: var(--space-s);
+}
+
+@media (min-width: 56rem) {
+  .detailMark { display: block; }
+}
+
+.focus {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs);
+  margin-top: var(--space-s);
+}
+
+.focusItem {
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  font-size: var(--step--1);
+  color: var(--botanic-800);
+  background: var(--sage-50);
+}
+
+/* ------------------------------------------------------- About: editorial */
+
+.aboutHero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: linear-gradient(160deg, var(--cream-100), var(--sage-100));
+  border-bottom: 1px solid var(--line);
+  padding-block: var(--space-2xl);
+}
+
+.aboutHeroInner {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: var(--space-l) var(--space-2xl);
+  grid-template-columns: 1fr;
+  align-items: center;
+}
+
+@media (min-width: 62rem) {
+  .aboutHeroInner { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+}
+
+.aboutMedallion {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius-l);
+  overflow: hidden;
+  background:
+    radial-gradient(110% 80% at 70% 12%, var(--sage-200), transparent 60%),
+    linear-gradient(165deg, var(--sage-100), var(--sage-300));
+  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+}
+
+.aboutMedallionLeaf {
+  position: absolute;
+  inset: -8% -6% auto auto;
+  width: 70%;
+  color: var(--botanic-700);
+  opacity: 0.3;
+}
+
+.aboutMedallionSprig {
+  position: absolute;
+  left: -8%;
+  bottom: -4%;
+  width: 46%;
+  color: var(--botanic-700);
+  opacity: 0.34;
+}
+
+.storyBand {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--botanic-800);
+  color: var(--text-on-deep);
+  padding-block: var(--space-2xl);
+}
+
+.storyBand h2,
+.storyBand h3 { color: var(--sage-50); }
+
+/* White kicker. The shared token is leaf-300, which is right on light grounds
+   but reads as a dull olive against this band's green. */
+.storyBand .kickerWhite {
+  color: #ffffff;
+}
+
+.storyGrid {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: var(--space-xl);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 48rem) {
+  .storyGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* Each fact is a panel with a face, an edge and a shadow, and it leans toward
+   the pointer. `--tilt-x` / `--tilt-y` / `--lift` are written from the pointer
+   handler, so the resting transform stays here in the stylesheet. */
+.factRow {
+  position: relative;
+  display: grid;
+  gap: 0.15rem;
+  padding: var(--space-s) var(--space-m);
+  border-radius: var(--radius-m);
+  isolation: isolate;
+  transform:
+    perspective(900px)
+    rotateX(var(--tilt-x, 0deg))
+    rotateY(var(--tilt-y, 0deg));
+  background:
+    linear-gradient(150deg,
+      rgba(255, 255, 255, 0.13) 0%,
+      rgba(255, 255, 255, 0.045) 44%,
+      rgba(0, 0, 0, 0.10) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.26),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+    0 12px 26px -18px rgba(4, 18, 11, 0.7),
+    0 2px 6px -4px rgba(4, 18, 11, 0.5);
+  transition: transform var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+/* The specular sweep, tracking the pointer via --gloss-x / --gloss-y. */
+.factGloss {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    62% 90% at var(--gloss-x, 30%) var(--gloss-y, 0%),
+    rgba(255, 255, 255, 0.13),
+    transparent 70%
+  );
+  transition: opacity var(--dur-fast) var(--ease-out);
+}
+
+/* Keep the type above the gloss layer. */
+.factRow dt,
+.factRow dd { position: relative; }
+
+.factLabel {
+  font-size: var(--step--1);
+  font-weight: 600;
+  font-stretch: 92%;
+  color: var(--leaf-300);
+}
+
+.factValue {
+  margin: 0;
+  font-size: var(--step-1);
+  color: var(--sage-50);
+}
+
+/* ------------------------------------------------------- stance gyroscope */
+/* Heading and gyroscope share the top row. Nothing below this moves. */
+
+.stanceTop {
+  display: grid;
+  gap: var(--space-l);
+  align-items: center;
+}
+
+@media (min-width: 62rem) {
+  .stanceTop { grid-template-columns: minmax(0, 1fr) auto; }
+}
+
+.gyro {
+  --gx: 14deg;
+  --gy: -20deg;
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: clamp(10rem, 30vw, 15rem);
+  aspect-ratio: 1;
+  perspective: 1000px;
+  justify-self: center;
+}
+
+@media (min-width: 62rem) {
+  .gyro { justify-self: end; }
+}
+
+.gyroRotor {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transform: rotateX(var(--gx)) rotateY(var(--gy));
+  transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Each ring is a real circle on its own axis, lit from the upper left so the
+   top of the ring is bright and the bottom falls into shadow. */
+.gyroRing {
+  position: absolute;
+  border-radius: 50%;
+  transform-style: preserve-3d;
+  /* A plain ring. An earlier version used a border-box gradient with a mask
+     composite to fake the bevel; the rings came out almost invisible against
+     the dark ground, so it is now a real border plus a lit glow. */
+  border: 1.5px solid rgba(198, 218, 185, 0.62);
+  box-shadow:
+    0 0 14px rgba(156, 201, 94, 0.26),
+    inset 0 0 14px rgba(156, 201, 94, 0.12);
+}
+
+/* Three different sizes as well as three different axes — otherwise they read
+   as one ring seen twice. */
+.gyroRingA { inset: 0; }
+.gyroRingB { inset: 13%; border-color: rgba(156, 201, 94, 0.66); }
+.gyroRingC { inset: 26%; border-color: rgba(220, 233, 214, 0.5); }
+
+.gyroRingA { animation: gyroSpinA 19s linear infinite; }
+.gyroRingB { animation: gyroSpinB 26s linear infinite; }
+.gyroRingC { animation: gyroSpinC 34s linear infinite; }
+
+@keyframes gyroSpinA {
+  from { transform: rotateX(74deg) rotateZ(0deg); }
+  to   { transform: rotateX(74deg) rotateZ(360deg); }
+}
+
+@keyframes gyroSpinB {
+  from { transform: rotateY(64deg) rotateZ(0deg); }
+  to   { transform: rotateY(64deg) rotateZ(-360deg); }
+}
+
+@keyframes gyroSpinC {
+  from { transform: rotateX(30deg) rotateY(26deg) rotateZ(0deg); }
+  to   { transform: rotateX(30deg) rotateY(26deg) rotateZ(360deg); }
+}
+
+/* The bead riding each ring — "one day at a time", at an ordinary pace. */
+.gyroBead {
+  position: absolute;
+  top: -0.36rem;
+  left: 50%;
+  width: 0.72rem;
+  height: 0.72rem;
+  margin-left: -0.36rem;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, #dfeada, #7cb342 46%, #164226);
+  box-shadow:
+    0 0 0 2px rgba(8, 28, 17, 0.55),
+    0 4px 10px rgba(4, 18, 11, 0.85);
+}
+
+.gyroCore {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 22%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.85), transparent 42%),
+    radial-gradient(circle at 62% 74%, rgba(15, 46, 27, 0.9), transparent 58%),
+    linear-gradient(150deg, var(--botanic-500), var(--botanic-800));
+  box-shadow:
+    inset 0 2px 3px rgba(255, 255, 255, 0.35),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.45),
+    0 18px 34px -12px rgba(4, 18, 11, 0.95);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* The rings keep their axes — only the travel stops. Without these they all
+     collapse onto the viewer's plane and read as a single flat circle. */
+  .gyroRingA { animation: none; transform: rotateX(74deg); }
+  .gyroRingB { animation: none; transform: rotateY(64deg); }
+  .gyroRingC { animation: none; transform: rotateX(30deg) rotateY(26deg); }
+  .gyroRotor { transition: none; }
+}
+
+/* ------------------------------------------------------ Contact: deep split */
+
+.contactWrap {
+  background: var(--botanic-950);
+  /* Clips the decorative rings, which are deliberately positioned outside the
+     info panel and were otherwise widening the document on every phone width. */
+  overflow: hidden;
+}
+
+.contactInner {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: var(--space-xl);
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+
+@media (min-width: 62rem) {
+  .contactInner {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: var(--space-2xl);
+  }
+}
+
+.contactForm {
+  padding: clamp(1.5rem, 1rem + 2.4vw, 2.75rem);
+  border-radius: var(--radius-l);
+  background: linear-gradient(168deg, var(--sage-50), var(--sage-100));
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-deep);
+}
+
+.info {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  gap: var(--space-l);
+  align-content: start;
+  padding: clamp(1.5rem, 1rem + 2vw, 2.25rem);
+  border-radius: var(--radius-l);
+  background: color-mix(in srgb, var(--botanic-800) 55%, transparent);
+  border: 1px solid var(--line-deep);
+}
+
+.infoRings {
+  position: absolute;
+  right: -18%;
+  bottom: -22%;
+  width: 78%;
+  color: var(--leaf-400);
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+.infoBlock { position: relative; }
+
+.infoLabel {
+  font-size: var(--step--1);
+  font-weight: 600;
+  font-stretch: 92%;
+  color: var(--leaf-300);
+  margin-bottom: 0.35rem;
+}
+
+.infoValue {
+  font-size: var(--step-1);
+  color: var(--sage-50);
+}
+
+.infoNote {
+  margin-top: var(--space-2xs);
+  font-size: var(--step--1);
+  color: var(--sage-300);
+}
+
+.infoNote a { color: var(--leaf-300); }
+
+/* ---------------------------------------------------------- produce band */
+
+.produceBand {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    180deg,
+    var(--botanic-800) 0%,
+    var(--botanic-700) 48%,
+    var(--botanic-800) 100%
+  );
+  padding-block: clamp(2rem, 4vw, 3.25rem);
+}
+
+/* A soft light band behind the produce so the marks separate from the ground */
+.produceBand::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    70% 130% at 50% 50%,
+    rgba(156, 201, 94, 0.22),
+    transparent 70%
+  );
+}
+
+.produceStrip {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.4rem, 2.6vw, 2.5rem);
+  /* nowrap + clip: wrapping put a second row behind the band's bottom edge
+     and the marks were sliced in half. */
+  flex-wrap: nowrap;
+  padding-inline: var(--page-pad);
+  max-width: 100%;
+}
+
+.produceStrip > * {
+  flex: 0 1 auto;
+  min-width: 0;
+  filter: drop-shadow(0 18px 26px rgba(4, 18, 11, 0.35));
+}
+
+/* Below tablet the eight marks become a balanced 4x2 block. Flex wrap was
+   leaving seven on the first row and a single orphan on the second, which read
+   as an accident rather than a composition. */
+@media (max-width: 48rem) {
+  .produceStrip {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    justify-items: center;
+    align-items: center;
+    gap: 0.85rem 0.5rem;
+    max-width: 22rem;
+    margin-inline: auto;
+  }
+  .produceStrip > * {
+    width: 100%;
+    max-width: 3.75rem;
+    height: auto;
+  }
+}
+
+/* --------------------------------------------------------------- shared */
+
+.note {
+  padding: var(--space-m);
+  border-left: 3px solid var(--botanic-600);
+  background: var(--sage-100);
+  color: var(--botanic-900);
+  font-size: var(--step-0);
+  border-radius: 0 var(--radius-m) var(--radius-m) 0;
+  /* Without this the note ran the full 1,160px container and set ~104
+     characters per line — roughly double a comfortable measure, and the eye
+     loses the start of the next line on the way back. */
+  max-width: 74ch;
+}
+
+.note p {
+  max-width: 68ch;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jumpItem { transition: none; }
+}

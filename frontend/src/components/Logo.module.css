@@ -1,0 +1,14 @@
+.logo {
+  display: block;
+  height: auto;
+  /* The asset already carries its own generous clear space; trimming it here
+     keeps the lockup optically tight against adjacent text at every size. */
+  object-fit: contain;
+}
+
+/* Knockout for dark grounds. brightness(0) collapses every channel to black,
+   invert(1) then maps that to pure white — no second asset, no extra request,
+   and the edges stay anti-aliased rather than hand-traced. */
+.light {
+  filter: brightness(0) invert(1);
+}

@@ -1,0 +1,229 @@
+.container {
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--page-pad);
+}
+
+.containerWide {
+  width: 100%;
+  max-width: 92rem;
+  margin-inline: auto;
+  padding-inline: var(--page-pad);
+}
+
+.containerNarrow {
+  width: 100%;
+  max-width: 52rem;
+  margin-inline: auto;
+  padding-inline: var(--page-pad);
+}
+
+/* -------------------------------------------------------------- surfaces */
+/* A surface is a deliberate choice, not an inherited default. Every route
+   composes from these rather than from a bare white <section>. */
+
+.section {
+  position: relative;
+  isolation: isolate;
+  padding-block: var(--space-2xl);
+  background: var(--bg);
+}
+
+/* Light herbal — fresh, airy reading surface */
+.surface {
+  background: var(--bg-mint);
+}
+
+/* Soft sage — a step deeper, for alternating bands */
+.surfaceSage {
+  background: var(--bg-sage);
+}
+
+/* Warm cream — used sparingly, as contrast relief */
+.surfaceCream {
+  background: var(--bg-cream);
+}
+
+/* Deep botanical — the editorial voice */
+.surfaceDeep {
+  position: relative;
+  isolation: isolate;
+  background: var(--bg-deep);
+  color: var(--text-on-deep);
+}
+
+.surfaceDeep h1,
+.surfaceDeep h2,
+.surfaceDeep h3,
+.surfaceDeep h4 {
+  color: var(--sage-50);
+}
+
+.surfaceDeeper {
+  position: relative;
+  isolation: isolate;
+  background: var(--bg-deeper);
+  color: var(--text-on-deep);
+}
+
+.surfaceDeeper h1,
+.surfaceDeeper h2,
+.surfaceDeeper h3,
+.surfaceDeeper h4 {
+  color: var(--sage-50);
+}
+
+.surfaceGlass {
+  position: relative;
+  isolation: isolate;
+  background: var(--glass-950);
+  color: var(--text-on-deep);
+}
+
+/* ------------------------------------------------------------- botanical */
+/* Leaf-field texture laid across a deep section. Purely decorative and kept
+   behind the type at a contrast the eye reads as grain, not as imagery. */
+.leafTexture {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  color: var(--leaf-400);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------- headings */
+
+.sectionTitle {
+  font-size: var(--step-3);
+  color: var(--botanic-900);
+}
+
+.lede {
+  font-size: var(--step-1);
+  color: var(--text-muted);
+  max-width: 46ch;
+}
+
+.surfaceDeep .lede,
+.surfaceDeeper .lede,
+.surfaceGlass .lede {
+  color: var(--text-on-deep-muted);
+}
+
+.prose {
+  max-width: var(--measure);
+}
+
+.prose p + p {
+  margin-top: var(--space-s);
+}
+
+.rule {
+  height: 1px;
+  background: var(--line);
+  border: 0;
+  margin: 0;
+}
+
+.surfaceDeep .rule,
+.surfaceDeeper .rule,
+.surfaceGlass .rule {
+  background: var(--line-deep);
+}
+
+/* ----------------------------------------------------------------- layout */
+
+.grid2 {
+  display: grid;
+  gap: var(--space-l) var(--space-xl);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 56rem) {
+  .grid2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.split {
+  display: grid;
+  gap: var(--space-l) var(--space-2xl);
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+
+@media (min-width: 62rem) {
+  .split {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  }
+}
+
+.splitReverse {
+  display: grid;
+  gap: var(--space-l) var(--space-2xl);
+  grid-template-columns: 1fr;
+  align-items: center;
+}
+
+@media (min-width: 62rem) {
+  .splitReverse {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  }
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
+}
+
+.stackL {
+  gap: var(--space-l);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+/* --------------------------------------------------------------- headings  */
+
+/* A small green rule + label. Sentence case on purpose: tracked-out capitals
+   above every heading is one of the loudest tells of a generated page. */
+.kicker {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: var(--space-s);
+  font-size: var(--step--1);
+  font-weight: 600;
+  font-stretch: 90%;
+  /* botanic-700, not -600: at -600 this measured 3.9:1 on the sage band,
+     which fails AA for body-size text. */
+  color: var(--botanic-700);
+}
+
+.kicker::before {
+  content: '';
+  width: 1.75rem;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--leaf-400);
+}
+
+.surfaceDeep .kicker,
+.surfaceDeeper .kicker,
+.surfaceGlass .kicker {
+  color: var(--leaf-300);
+}
+
+.surfaceDeep .kicker::before,
+.surfaceDeeper .kicker::before,
+.surfaceGlass .kicker::before {
+  background: var(--leaf-400);
+}

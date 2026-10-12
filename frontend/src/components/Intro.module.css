@@ -1,0 +1,200 @@
+/* ==========================================================================
+   Brand intro — a centred mark on a soft botanical ground that dissolves
+   into the page.
+
+   The ground is light because the real logo is dark green artwork: putting it
+   on a dark field either hides it or flattens it to a white knockout. Cream
+   lets the brand colours stay themselves.
+   ========================================================================== */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(110% 80% at 50% 42%, var(--sage-50) 0%, var(--cream-100) 55%, var(--cream-200) 100%),
+    var(--cream-100);
+  overflow: hidden;
+  /* The overlay owns the viewport while it is up. */
+  touch-action: none;
+}
+
+/* Fades the whole curtain away to reveal the page beneath */
+.overlayFading {
+  animation: overlayOut 640ms var(--ease-in-out) forwards;
+}
+
+@keyframes overlayOut {
+  from { opacity: 1; }
+  to   { opacity: 0; visibility: hidden; }
+}
+
+/* Leaf field behind the stage, kept faint so it reads as grain not clutter */
+.texture {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: var(--botanic-600);
+  opacity: 0.16;
+  pointer-events: none;
+}
+
+/* A soft pool of light behind the mark so it lifts off the ground */
+.glow {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  width: min(120vw, 56rem);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(124, 179, 66, 0.3) 0%,
+    rgba(44, 122, 59, 0.1) 42%,
+    transparent 66%
+  );
+  animation: glowPulse 2.4s var(--ease-in-out) 160ms both;
+}
+
+@keyframes glowPulse {
+  from { transform: scale(0.86); opacity: 0; }
+  40%  { opacity: 1; }
+  to   { transform: scale(1.06); opacity: 0.8; }
+}
+
+.stage {
+  position: relative;
+  /* The mark is centred on the viewport on its own. The caption is taken out
+     of flow and hung below, because as a sibling in the grid it would sit
+     between the mark and the middle and drag the mark upward. */
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  padding-inline: var(--page-pad);
+  text-align: center;
+}
+
+/* Logo half-height as a share of its width: 765 x 677, so 677/2/765. The mark
+   is then shifted up by its own centroid offset (8.51% of its width), so its
+   bottom edge lands at 50% + 0.4425W - 0.0753W = 50% + 0.3672W. Keeping the
+   caption anchored to the edge is what holds the gap constant. */
+.caption {
+  position: absolute;
+  left: 50%;
+  top: calc(50% + min(240px, 38vw) * 0.3672 + var(--space-m));
+  translate: -50% 0;
+  display: grid;
+  justify-items: center;
+  gap: var(--space-xs);
+  text-align: center;
+}
+
+/* "Pops" in with a slight overshoot rather than simply fading up.
+   Duration and delay are mirrored by POP_DUR / POP_DELAY in Intro.tsx. */
+.mark {
+  display: block;
+  animation: markPop 780ms cubic-bezier(0.22, 1.4, 0.36, 1) 90ms both;
+}
+
+/* No drop-shadow here. The mark is a fine line drawing with small type under
+   it; a blur behind it reads as dirt and is exactly what made the earlier
+   version look smudged. Lifting comes from the scale, not from a halo. */
+/* The mark sits at the exact geometric centre of the viewport, but that is not
+   the same as looking centred.
+
+   Measured against the asset, the alpha-weighted centroid of the artwork is
+   41px right and 58px down from the middle of the 765x677 canvas — the heavy
+   dark "SPOON" and the strapline pull the visual mass that way. A perfectly
+   centred *box* therefore reads as sitting slightly right and low.
+
+   These two offsets shift the artwork so its mass lands on the centre instead.
+   They are percentages of the element's own size, so they scale with it:
+     X  -41.1 / 765 = -5.37% of the width
+     Y  -57.6 / 677 = -8.51% of the height (canvas height, not artwork height)
+   The numbers are measured, not eyeballed. Re-derive them if the asset changes. */
+.markImg {
+  /* `max-width` rather than `width` so the component's intrinsic size sets the
+     ceiling on large screens while narrow ones scale down instead of
+     overflowing. Deliberately modest: the mark introduces the site, so it sits
+     inside its own clear space rather than filling the screen. Still renders at
+     3.2x the 765px asset on a large screen, so it is never upscaled. */
+  max-width: min(240px, 38vw);
+  height: auto;
+  translate: -5.37% -8.51%;
+}
+
+.mark img {
+  display: block;
+  height: auto;
+}
+
+@keyframes markPop {
+  0%   { opacity: 0; transform: scale(0.66) translateY(14px); }
+  55%  { opacity: 1; transform: scale(1.05) translateY(0); }
+  75%  { transform: scale(0.985); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.rule {
+  display: block;
+  width: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--leaf-400);
+  animation: draw 700ms var(--ease-out) 560ms both;
+}
+
+@keyframes draw {
+  from { width: 0; opacity: 0; }
+  to   { width: clamp(5rem, 20vw, 10rem); opacity: 1; }
+}
+
+.stance {
+  margin: 0;
+  max-width: 34ch;
+  font-size: var(--step--1);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--botanic-700);
+  animation: rise 700ms var(--ease-out) 720ms both;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Whole stage lifts away as the curtain dissolves */
+.lifting {
+  animation: lift 640ms var(--ease-in-out) forwards;
+}
+
+@keyframes lift {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to   { opacity: 0; transform: translateY(-20px) scale(1.03); }
+}
+
+/* Short phones: the strapline is the first thing to go, so the mark keeps
+   its breathing room instead of the group growing crowded. */
+@media (max-height: 30rem) {
+  .stance { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .glow,
+  .mark,
+  .caption,
+  .rule,
+  .stance {
+    animation: none;
+  }
+  .rule { width: clamp(5rem, 20vw, 10rem); }
+  .mark,
+  .stance { opacity: 1; }
+}

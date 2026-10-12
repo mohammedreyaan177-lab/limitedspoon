@@ -1,0 +1,108 @@
+.btn {
+  --btn-bg: var(--botanic-700);
+  --btn-fg: var(--sage-50);
+  --btn-border: var(--botanic-700);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  min-height: 3rem; /* comfortable touch target on mobile */
+  padding: 0.8rem 1.6rem;
+  border: 1px solid var(--btn-border);
+  border-radius: var(--radius-pill);
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  font-family: var(--font-sans);
+  font-size: var(--step-0);
+  font-weight: 600;
+  font-stretch: 94%;
+  letter-spacing: 0.005em;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.btn:hover:not(:disabled) {
+  --btn-bg: var(--botanic-800);
+  --btn-border: var(--botanic-800);
+  box-shadow: var(--shadow-m);
+}
+
+.btn:active:not(:disabled) {
+  box-shadow: none;
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Leaf green: the energetic accent, reserved for the primary action */
+.btnLeaf {
+  --btn-bg: var(--leaf-400);
+  --btn-fg: var(--botanic-950);
+  --btn-border: var(--leaf-400);
+}
+
+.btnLeaf:hover:not(:disabled) {
+  --btn-bg: var(--leaf-300);
+  --btn-border: var(--leaf-300);
+}
+
+/* Filled tint for secondary actions on light herbal grounds */
+.btnSoft {
+  --btn-bg: var(--sage-200);
+  --btn-fg: var(--botanic-800);
+  --btn-border: var(--sage-200);
+}
+
+.btnSoft:hover:not(:disabled) {
+  --btn-bg: var(--sage-300);
+  --btn-border: var(--sage-300);
+}
+
+.btnOutline {
+  --btn-bg: transparent;
+  --btn-fg: var(--botanic-800);
+  --btn-border: var(--line-strong);
+}
+
+.btnOutline:hover:not(:disabled) {
+  --btn-bg: color-mix(in srgb, var(--botanic-700) 9%, transparent);
+  --btn-fg: var(--botanic-900);
+  --btn-border: var(--botanic-600);
+}
+
+/* On deep grounds the outline is light and never blocks the artwork */
+.btnOutlineLight {
+  --btn-bg: transparent;
+  --btn-fg: var(--sage-100);
+  --btn-border: color-mix(in srgb, var(--sage-200) 42%, transparent);
+}
+
+.btnOutlineLight:hover:not(:disabled) {
+  --btn-bg: color-mix(in srgb, var(--leaf-400) 16%, transparent);
+  --btn-fg: var(--sage-50);
+  --btn-border: var(--leaf-400);
+}
+
+.btnLg {
+  min-height: 3.25rem;
+  padding: 0.95rem 2rem;
+  font-size: var(--step-1);
+}
+
+.btnBlock {
+  width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: none;
+  }
+}

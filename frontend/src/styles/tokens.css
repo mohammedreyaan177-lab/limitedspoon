@@ -1,0 +1,155 @@
+/* ==========================================================================
+   Limited Spoon Wellness — design tokens
+
+   GREEN IS THE BRAND. The site is built on a nine-step botanical ramp derived
+   from the company's own logo (--botanic-700 is the logo's wordmark green,
+   --leaf-400 is the apple mark's green), with cream and the glass-blue
+   reserved as supporting contrast rather than as the default surface.
+
+   Structure of the ramp, darkest to lightest:
+     950 / 900  deep forest   — editorial bands, footer
+     800 / 700  botanical     — section grounds, headings on light
+     600 / 500  moss / leaf   — accents, interactive
+     400 / 300  fresh leaf    — highlights on dark grounds
+     sage 200/100 light herbal — light reading surfaces
+     cream       warm neutral  — occasional contrast only
+
+   Deliberately NOT used as defaults anywhere: pure white canvases, grey text
+   on white, or a single flat green across the whole site. Every surface is
+   chosen, and the five routes each sit on a different one.
+   ========================================================================== */
+
+:root {
+  /* ------------------------------------------------- botanical green ramp */
+  --botanic-950: #081c11;
+  --botanic-900: #0f2e1b;
+  --botanic-800: #164226;
+  --botanic-700: #1f5f2e; /* logo wordmark green */
+  --botanic-600: #2c7a3b;
+  --botanic-500: #3f8f47;
+
+  --leaf-500: #4a9a52;
+  --leaf-400: #7cb342; /* logo apple-mark green */
+  --leaf-300: #9bc95e;
+  --leaf-200: #bcd98a;
+
+  --sage-400: #a9c69c;
+  --sage-300: #c6dab9;
+  --sage-200: #dfeada;
+  --sage-100: #eef4e9;
+  --sage-50: #f6f9f3;
+
+  --olive-600: #5f7038;
+  --olive-400: #93a45e;
+
+  /* -------------------------------------------------- supporting neutrals */
+  --cream-100: #f7f4ec;
+  --cream-200: #efe9da;
+  --sand-300: #ddd2ba;
+
+  /* Observed in the Instagram logo ring — a warm accent used sparingly */
+  --amber-500: #e39a16;
+  --amber-300: #f0c05a;
+
+  /* The rain-glass palette, kept exactly as built */
+  --glass-950: #04121b;
+  --glass-900: #0a1f2c;
+  --glass-800: #10304a;
+  --glass-700: #1a4e68;
+  --glass-500: #4e829c;
+  --glass-300: #9cb6d0;
+  --glass-200: #b6d0ea;
+  --glass-100: #dce9f4;
+
+  /* ------------------------------------------------------------- semantic */
+  --bg: var(--sage-50);
+  --bg-mint: var(--sage-100);
+  --bg-sage: var(--sage-200);
+  --bg-deep: var(--botanic-900);
+  --bg-deeper: var(--botanic-950);
+  --bg-cream: var(--cream-100);
+
+  --text: var(--botanic-950);
+  --text-muted: #3f5a45;
+  --text-soft: #4e6b54;
+  --text-on-deep: var(--sage-100);
+  --text-on-deep-muted: #a9c69c;
+
+  --accent: var(--botanic-700);
+  --accent-hover: var(--botanic-800);
+  --accent-bright: var(--leaf-400);
+
+  --line: color-mix(in srgb, var(--botanic-800) 16%, transparent);
+  --line-strong: color-mix(in srgb, var(--botanic-800) 30%, transparent);
+  --line-deep: color-mix(in srgb, var(--sage-200) 22%, transparent);
+
+  /* ------------------------------------------------------------ typography */
+  --font-display: 'Fraunces', 'Iowan Old Style', Georgia, serif;
+  --font-sans: 'Archivo', 'Segoe UI', system-ui, -apple-system, sans-serif;
+
+  --step--1: clamp(0.8125rem, 0.78rem + 0.16vw, 0.875rem);
+  --step-0: clamp(0.9375rem, 0.9rem + 0.2vw, 1.0625rem);
+  --step-1: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  --step-2: clamp(1.25rem, 1.15rem + 0.5vw, 1.625rem);
+  --step-3: clamp(1.5rem, 1.32rem + 0.9vw, 2.25rem);
+  --step-4: clamp(1.875rem, 1.55rem + 1.6vw, 3.25rem);
+  --step-5: clamp(2.5rem, 1.7rem + 3.4vw, 5.25rem);
+
+  --leading-tight: 1.04;
+  --leading-snug: 1.2;
+  --leading-normal: 1.62;
+
+  --tracking-display: -0.025em;
+
+  /* ---------------------------------------------------------------- space */
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-s: 1rem;
+  --space-m: 1.5rem;
+  --space-l: 2.25rem;
+  --space-xl: 3.5rem;
+  --space-2xl: clamp(3.5rem, 2.5rem + 5vw, 7rem);
+  --space-3xl: clamp(5rem, 3.5rem + 7vw, 10rem);
+
+  /* ----------------------------------------------------------------- layout */
+  --measure: 62ch;
+  --page-max: 78rem;
+  --page-pad: clamp(1.15rem, 0.6rem + 2.4vw, 4rem);
+
+  --radius-s: 3px;
+  --radius-m: 8px;
+  --radius-l: 20px;
+  --radius-pill: 999px;
+
+  /* ----------------------------------------------------------------- depth */
+  --shadow-s: 0 1px 2px color-mix(in srgb, var(--botanic-950) 10%, transparent);
+  --shadow-m: 0 6px 24px -8px color-mix(in srgb, var(--botanic-950) 22%, transparent);
+  --shadow-l: 0 24px 60px -24px color-mix(in srgb, var(--botanic-950) 34%, transparent);
+  --shadow-deep: 0 30px 70px -30px color-mix(in srgb, #000 60%, transparent);
+
+  /* ---------------------------------------------------------------- motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 160ms;
+  --dur-mid: 300ms;
+  --dur-slow: 680ms;
+  --dur-slower: 1100ms;
+
+  --header-h: 4.25rem;
+}
+
+@media (min-width: 48rem) {
+  :root {
+    --header-h: 5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 1ms;
+    --dur-mid: 1ms;
+    --dur-slow: 1ms;
+    --dur-slower: 1ms;
+  }
+}

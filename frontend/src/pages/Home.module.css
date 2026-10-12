@@ -1,0 +1,875 @@
+/* ==========================================================================
+   Home — the brand introduction.
+
+   Surface sequence, top to bottom. Each band is a different green on purpose;
+   the page should never read as one long fill.
+
+     1  glass hero        — the existing water, untouched
+     2  light herbal      — airy, the argument
+     3  deep botanical    — the editorial voice, oversized type + leaf art
+     4  soft sage         — areas of care index, hairline rows
+     5  deeper green      — nutrition literacy, leaf-field texture
+     6  sage + leaf focal — the founder
+     7  glass band        — closing CTA, water again
+   ========================================================================== */
+
+/* ------------------------------------------------------------------- hero */
+/* The glass is preserved exactly as built. Only the scrim and type move. */
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  /* Exactly one viewport tall.
+     - `vh`  : fallback for anything without the newer units.
+     - `svh` : the *small* viewport height. Guarantees the hero fits when mobile
+               browser chrome is expanded, so the copy is never clipped.
+     - `dvh` : the live viewport height, so with the URL bar collapsed the hero
+               genuinely fills the screen edge to edge.
+     Being a `min-height`, short landscape phones simply grow the box rather
+     than crushing the copy. */
+  min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  background: var(--glass-950);
+  /* The header is sticky and therefore in flow. Pulling the hero up under it
+     and adding the height back as padding is what makes the glass genuinely
+     full-bleed, without the header having to go `fixed` and take the document
+     out of normal flow for every other route. */
+  margin-top: calc(-1 * var(--header-h));
+  padding-top: var(--header-h);
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  /* Keeps the water legible as water while giving the copy a bed to sit on. */
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--glass-950) 46%, transparent) 0%,
+      color-mix(in srgb, var(--glass-950) 6%, transparent) 36%,
+      color-mix(in srgb, var(--glass-950) 80%, transparent) 100%
+    ),
+    radial-gradient(
+      120% 80% at 4% 84%,
+      color-mix(in srgb, var(--botanic-950) 78%, transparent) 0%,
+      transparent 58%
+    );
+}
+
+.heroInner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding-block: var(--space-2xl) var(--space-xl);
+  color: var(--glass-100);
+}
+
+.heroTitle {
+  font-size: var(--step-5);
+  font-weight: 400;
+  max-width: 15ch;
+  color: #f6fbff;
+}
+
+/* The one typographic gesture on the page: the middle promise set in the
+   display face's italic, in leaf green rather than a different colour. */
+.heroTitle em {
+  font-style: italic;
+  font-variation-settings: 'SOFT' 40, 'WONK' 1;
+  color: var(--leaf-300);
+}
+
+.heroSub {
+  margin-top: var(--space-m);
+  max-width: 44ch;
+  font-size: var(--step-1);
+  line-height: 1.5;
+  color: color-mix(in srgb, var(--glass-100) 86%, transparent);
+}
+
+.heroActions {
+  margin-top: var(--space-l);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.heroActions > * { flex: 1 1 auto; }
+
+@media (min-width: 34rem) {
+  .heroActions > * { flex: 0 0 auto; }
+}
+
+.scrollHint {
+  position: absolute;
+  right: var(--page-pad);
+  bottom: var(--space-m);
+  z-index: 2;
+  display: none;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: var(--step--1);
+  color: color-mix(in srgb, var(--glass-200) 55%, transparent);
+}
+
+.scrollHintLine {
+  width: 3.5rem;
+  height: 1px;
+  background: currentColor;
+  transform-origin: left;
+  animation: trail 2.8s var(--ease-in-out) infinite;
+}
+
+@keyframes trail {
+  0%, 100% { transform: scaleX(0.25); opacity: 0.35; }
+  50% { transform: scaleX(1); opacity: 1; }
+}
+
+@media (min-width: 64rem) {
+  /* Reserve a lane for the scroll hint so it can never collide with the
+     hero's own buttons. */
+  .heroInner { padding-bottom: calc(var(--space-xl) + 2.5rem); }
+  .scrollHint { display: flex; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scrollHintLine { animation: none; transform: scaleX(1); }
+}
+
+/* ------------------------------------------------------ 5. nutrition literacy */
+
+/* The band was a deep green, then asked for as white. It is not a flat white:
+   a whisper of the sage ramp at the foot and a leaf-green pool behind the
+   produce keep it in the same family as every other band on the page, so it
+   reads as a light surface rather than a hole punched back out to the browser
+   default. Self-contained rather than built on `surfaceDeeper`/`surface`, both
+   of which hard-code their own fill. */
+.literacy {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    radial-gradient(52% 42% at 78% 24%, rgba(124, 179, 66, 0.16), transparent 70%),
+    radial-gradient(130% 70% at 50% 108%, var(--sage-100) 0%, transparent 64%),
+    linear-gradient(172deg, #ffffff 0%, #fdfefb 52%, var(--sage-50) 100%);
+  color: var(--botanic-900);
+}
+
+/* Text inverts with the ground: everything here was light-on-dark and is now
+   dark-on-light. */
+.literacy h1,
+.literacy h2,
+.literacy h3,
+.literacy h4 {
+  color: var(--botanic-950);
+}
+
+.literacy .kicker { color: var(--botanic-700); }
+.literacy .kicker::before { background: var(--leaf-400); }
+.literacy .rule { background: var(--line-strong); }
+
+/* The leaf field was drawn for a dark ground. On white it needs to be a
+   watermark, not a texture you can read. Two classes so this beats the single
+   class on `layout.leafTexture` regardless of stylesheet order — a `:global`
+   selector would not, because the emitted class name is hashed. */
+.literacy .literacyLeaves { opacity: 0.13; }
+
+/* Body copy under the four notes. Was set inline to the on-dark sage, which
+   would be close to invisible here. */
+.literacyBody { color: var(--text-soft); }
+
+/* Heading and produce share the top of the band; the notes run full width
+   beneath, so the eye goes heading -> shelf -> detail. */
+.literacyHead {
+  display: grid;
+  gap: var(--space-l) var(--space-2xl);
+  align-items: center;
+  grid-template-columns: 1fr;
+}
+
+.literacyArt {
+  position: relative;
+  width: 100%;
+  max-width: 13rem;
+  aspect-ratio: 1;
+  justify-self: center;
+}
+
+@media (min-width: 62rem) {
+  .literacyHead { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+  .literacyArt { max-width: 13.5rem; justify-self: end; }
+}
+
+/* Notes follow the heading/shelf row rather than being pushed down by the
+   taller art column. */
+.literacyNotes { margin-top: var(--space-l); }
+
+/* ------------------------------------------------------------------- plate */
+/* A dimensional plate carrying the mark. Reads as a raised, beveled chip:
+   a light source at the top-left, a darker underside, a specular sweep across
+   the face, and the logo floating a few pixels above it. */
+
+.plate {
+  position: relative;
+  margin-top: var(--space-l);
+  width: fit-content;
+  padding: var(--space-s) var(--space-m);
+  border-radius: var(--radius-l);
+  background:
+    linear-gradient(148deg,
+      rgba(255, 255, 255, 0.34) 0%,
+      rgba(255, 255, 255, 0.15) 34%,
+      rgba(255, 255, 255, 0.06) 58%,
+      rgba(0, 0, 0, 0.10) 100%),
+    linear-gradient(180deg, rgba(31, 95, 46, 0.92), rgba(8, 28, 17, 0.86));
+  /* Top highlight + bottom shadow = the two edges that sell the bevel. */
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.42),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.30),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 18px 34px -14px rgba(4, 18, 11, 0.7),
+    0 4px 10px -6px rgba(4, 18, 11, 0.55);
+  isolation: isolate;
+  transform: perspective(700px) rotateX(7deg) rotateY(-9deg);
+  animation: plateFloat 7s var(--ease-in-out) infinite;
+}
+
+@keyframes plateFloat {
+  0%, 100% { transform: perspective(700px) rotateX(7deg) rotateY(-9deg) translateY(0); }
+  50%      { transform: perspective(700px) rotateX(5deg) rotateY(-6deg) translateY(-5px); }
+}
+
+/* The specular sweep. Sits above the plate face but below the logo. */
+.plateSheen {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.plateSheen::before {
+  content: '';
+  position: absolute;
+  top: -60%;
+  left: -30%;
+  width: 55%;
+  height: 220%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.26) 46%,
+    rgba(255, 255, 255, 0.06) 58%,
+    transparent
+  );
+  transform: rotate(14deg);
+  animation: sweep 6.5s var(--ease-in-out) infinite;
+}
+
+@keyframes sweep {
+  0%, 62% { transform: rotate(14deg) translateX(-40%); }
+  92%, 100% { transform: rotate(14deg) translateX(320%); }
+}
+
+/* The mark sits proud of the plate.
+   The filter is spelled out in full rather than just `drop-shadow`: this rule
+   comes later in the bundle than Logo.module.css's `.light` knockout, so a
+   partial `filter` here would silently win over `brightness(0) invert(1)` and
+   drop the mark back to its natural dark green on a dark plate. */
+.plateLogo {
+  position: relative;
+  z-index: 2;
+  display: block;
+  filter: brightness(0) invert(1) drop-shadow(0 7px 10px rgba(2, 12, 7, 0.5));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .plate,
+  .plateSheen::before { animation: none; }
+  .plate { transform: none; }
+  .plateSheen::before { opacity: 0.5; transform: rotate(14deg); }
+}
+
+/* Narrow: the shelf sits above the heading and stays small enough not to
+   push the notes further down the page than they deserve. */
+@media (max-width: 40rem) {
+  .literacyArt { max-width: 9rem; }
+}
+
+/* -------------------------------------------------------------- argument */
+
+.argument {
+  display: grid;
+  gap: var(--space-l) var(--space-2xl);
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+
+@media (min-width: 62rem) {
+  .argument { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+}
+
+/* The promise set as stacked display type rather than a single line — this is
+   the page's loudest typographic moment and it is type, not decoration. */
+.promiseStack {
+  font-size: var(--step-4);
+  font-weight: 400;
+  line-height: 0.96;
+  color: var(--botanic-800);
+}
+
+.promiseStack span { display: block; }
+
+/* The promise is centred in its column now that the dial sits under it, rather
+   than hugging the left edge with a field of dead space beneath. */
+.promiseStage {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: var(--space-xl);
+}
+
+/* ------------------------------------------------------------------ clock */
+/* The practice's clock-in-apple, rebuilt. The logo puts a clock face inside
+   the apple because the practice is about *when* you eat, not only what. This
+   runs that motif as a real dial: a beveled bezel, hour ticks, eight produce
+   marks set where the hours would be, and a hub with a hand. Entirely CSS and
+   the existing Produce marks — no image, no model, no extra request. */
+
+.clock {
+  position: relative;
+  display: block;
+  width: min(100%, 17rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  isolation: isolate;
+}
+
+/* The rim. Light catches the top-left, the underside falls away — the same
+   bevel vocabulary as the plate and the tiles, at a larger scale. */
+.clockBezel {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: 50%;
+  background:
+    conic-gradient(
+      from 210deg,
+      rgba(255, 255, 255, 0.42) 0deg,
+      rgba(255, 255, 255, 0.06) 70deg,
+      rgba(0, 0, 0, 0.22) 160deg,
+      rgba(0, 0, 0, 0.30) 250deg,
+      rgba(255, 255, 255, 0.30) 330deg,
+      rgba(255, 255, 255, 0.42) 360deg
+    ),
+    radial-gradient(circle at 50% 50%, transparent 62%, rgba(8, 28, 17, 0.5) 100%);
+  box-shadow:
+    inset 0 2px 3px rgba(255, 255, 255, 0.45),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.45),
+    0 30px 54px -22px rgba(8, 28, 17, 0.55),
+    0 8px 16px -10px rgba(8, 28, 17, 0.4);
+}
+
+/* Twelve hour ticks. Sized to the face, not the bezel, so they read against a
+   surface they can be seen on. Cut from a conic gradient rather than twelve
+   elements, and masked so only the ring survives. */
+.clockTicks {
+  position: absolute;
+  inset: 13%;
+  z-index: 1;
+  border-radius: 50%;
+  background: repeating-conic-gradient(
+    from -0.6deg,
+    color-mix(in srgb, var(--botanic-800) 52%, transparent) 0deg 1.6deg,
+    transparent 1.6deg 30deg
+  );
+  mask: radial-gradient(circle, transparent 0 89%, #000 90%);
+  -webkit-mask: radial-gradient(circle, transparent 0 89%, #000 90%);
+  opacity: 0.85;
+}
+
+.clockFace {
+  position: absolute;
+  inset: 13%;
+  /* Explicit stacking. These are all absolutely positioned siblings, so without
+     z-index they paint in DOM order and the face — which comes after the dial
+     in the markup — covers the produce and the hand completely. */
+  z-index: 2;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.62), transparent 58%),
+    linear-gradient(160deg, var(--sage-100), var(--sage-200) 58%, var(--sage-300));
+  box-shadow:
+    inset 0 2px 5px rgba(8, 28, 17, 0.22),
+    inset 0 -2px 6px rgba(255, 255, 255, 0.55),
+    0 6px 14px -8px rgba(8, 28, 17, 0.45);
+}
+
+.clockDial {
+  position: absolute;
+  inset: 13%;
+  z-index: 3;
+  animation: clockSpin 70s linear infinite;
+}
+
+@keyframes clockSpin {
+  to { transform: rotate(360deg); }
+}
+
+.clockMark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  /* A fixed square box, so every mark sits at the same radius whatever its
+     own proportions — the produce marks are not all the same aspect, and
+     sizing them by width left the ring visibly lumpy. The SVG inside is fitted
+     to the box rather than stretched, so nothing is distorted. */
+  width: 22%;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  /* Centring FIRST, then the angle, then the push out to the rim. Order
+     matters: with the centring last it is applied in the rotated frame, which
+     walks each mark off the centre line and parks it on the bezel. `--i` and
+     `--n` are inline, so adding a mark needs no CSS. */
+  transform:
+    translate(-50%, -50%)
+    rotate(calc(var(--i) * (360deg / var(--n))))
+    translateY(-168%);
+}
+
+.clockMark > svg {
+  /* `Produce` sets percentage width/height attributes, which resolve
+     inconsistently inside a grid. Driving it from CSS instead makes every mark
+     fill its box exactly. All the marks share a 100x100 viewBox, so nothing is
+     stretched — the content is square either way. */
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 3px 5px rgba(8, 28, 17, 0.35));
+}
+
+/* The hub, and the hand that makes it a clock rather than a wreath. */
+.clockHub {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 15%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 34% 30%, rgba(255, 255, 255, 0.75), transparent 60%),
+    linear-gradient(150deg, var(--botanic-600), var(--botanic-800));
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.5),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.4),
+    0 6px 12px -5px rgba(8, 28, 17, 0.6);
+  z-index: 5;
+}
+
+.clockHand {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 30%;
+  height: 3%;
+  border-radius: 3px;
+  /* Pivot at the hub: the element's left edge sits on the centre, so the
+     centring shift is only half the width. */
+  margin-left: -3%;
+  margin-top: -1.5%;
+  transform-origin: 0 50%;
+  transform: rotate(38deg);
+  background: linear-gradient(90deg, var(--botanic-700), var(--botanic-950));
+  box-shadow: 0 2px 4px rgba(8, 28, 17, 0.55);
+  z-index: 4;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .clockDial { animation: none; }
+}
+
+/* Narrow: the dial is the focal point, so let it breathe rather than shrink
+   into the gutter. */
+@media (max-width: 40rem) {
+  .clock { width: min(84%, 14rem); }
+}
+
+.promiseStack span:nth-child(2) {
+  padding-left: 0.9em;
+  color: var(--botanic-600);
+}
+
+.promiseStack span:nth-child(3) {
+  padding-left: 1.8em;
+  color: var(--leaf-500);
+}
+
+.argumentBody p + p { margin-top: var(--space-s); }
+
+.argumentBody p:first-child {
+  font-size: var(--step-1);
+  color: var(--botanic-900);
+}
+
+.argumentBody p:not(:first-child) { color: var(--text-muted); }
+
+.signature {
+  margin-top: var(--space-m);
+  padding-top: var(--space-s);
+  border-top: 1px solid var(--line);
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  font-style: italic;
+  color: var(--botanic-700);
+}
+
+.signature span {
+  display: block;
+  margin-top: 0.2rem;
+  font-family: var(--font-sans);
+  font-style: normal;
+  font-size: var(--step--1);
+  color: var(--text-soft);
+}
+
+/* ------------------------------------------------- deep editorial stance */
+/* Oversized display type on deep green. This is the page's one bold move. */
+
+.stance {
+  display: grid;
+  gap: var(--space-xl);
+  grid-template-columns: 1fr;
+  align-items: center;
+}
+
+@media (min-width: 62rem) {
+  .stance { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+}
+
+.stanceLead {
+  font-size: var(--step-3);
+  font-weight: 400;
+  line-height: 1.14;
+  color: var(--sage-50);
+  max-width: 18ch;
+}
+
+.stanceList {
+  display: grid;
+  gap: var(--space-m);
+}
+
+.stanceItem {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: var(--space-s);
+  padding-top: var(--space-s);
+  border-top: 1px solid var(--line-deep);
+}
+
+.stanceItemText {
+  display: grid;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+/* ------------------------------------------------------------------ tiles */
+/* Same bevel language as the logo plate on the literacy band: a light edge on
+   top, a shaded underside, the icon lifted off the face. Smaller and square,
+   so three of them down the list read as one set. */
+
+.tile {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 2.9rem;
+  aspect-ratio: 1;
+  border-radius: var(--radius-m);
+  color: var(--sage-50);
+  background:
+    linear-gradient(148deg,
+      rgba(255, 255, 255, 0.24) 0%,
+      rgba(255, 255, 255, 0.08) 40%,
+      rgba(255, 255, 255, 0.02) 62%,
+      rgba(0, 0, 0, 0.22) 100%),
+    linear-gradient(180deg, rgba(31, 95, 46, 0.85), rgba(8, 28, 17, 0.92));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.38),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.34),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.07),
+    0 10px 20px -10px rgba(4, 18, 11, 0.85);
+  isolation: isolate;
+  transform: perspective(520px) rotateX(8deg) rotateY(-10deg);
+  transition: transform var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+/* The tile tips toward the reader as it is read, then settles. */
+.tile:hover {
+  transform: perspective(520px) rotateX(3deg) rotateY(-3deg) translateY(-2px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.34),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 18px 28px -12px rgba(4, 18, 11, 0.9);
+}
+
+.tile svg {
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 2px 3px rgba(2, 12, 7, 0.55));
+}
+
+.tileSheen {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.tileSheen::before {
+  content: '';
+  position: absolute;
+  top: -70%;
+  left: -40%;
+  width: 70%;
+  height: 240%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.22) 48%, transparent);
+  transform: rotate(16deg);
+  animation: tileSheen 5.5s var(--ease-in-out) infinite;
+}
+
+@keyframes tileSheen {
+  0%, 70% { transform: rotate(16deg) translateX(-60%); }
+  100% { transform: rotate(16deg) translateX(260%); }
+}
+
+/* Staggered so the three do not sweep in lockstep. */
+.stanceItem:nth-child(2) .tileSheen::before { animation-delay: 1.8s; }
+.stanceItem:nth-child(3) .tileSheen::before { animation-delay: 3.6s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tile,
+  .tileSheen::before { animation: none; transition: none; }
+  .tile { transform: none; }
+  .tileSheen::before { opacity: 0.45; transform: rotate(16deg); }
+}
+
+/* Narrow: the tile sits above the text instead of beside it. Inline, it took
+   2.9rem plus a gap out of a 268px column and left ~212px for the body copy —
+   roughly 28 characters a line, which reads as cramped. Stacked, the copy gets
+   the full width back (~38 characters) and the title stops breaking awkwardly.
+   Desktop keeps the tile inline. */
+@media (max-width: 40rem) {
+  .stanceItem {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-xs);
+  }
+  .tile { width: 2.4rem; }
+}
+
+.stanceItemTitle {
+  font-family: var(--font-sans);
+  font-size: var(--step-1);
+  font-weight: 600;
+  font-stretch: 92%;
+  color: var(--leaf-300);
+}
+
+.stanceItemBody {
+  color: var(--sage-300);
+  font-size: var(--step-0);
+}
+
+/* The leaf art that anchors this band */
+.stanceArt {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 18rem;
+}
+
+.stanceLeaf {
+  position: absolute;
+  width: min(72%, 22rem);
+  color: var(--leaf-400);
+  opacity: 0.5;
+}
+
+.stanceSprig {
+  position: absolute;
+  right: 4%;
+  bottom: 0;
+  width: clamp(5rem, 12vw, 9rem);
+  color: var(--leaf-300);
+  opacity: 0.42;
+}
+
+/* ---------------------------------------------------------------- care */
+
+.careList {
+  border-top: 1px solid var(--line);
+}
+
+.careItem { border-bottom: 1px solid var(--line); }
+
+.careLink {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.35rem;
+  padding-block: var(--space-m);
+  text-decoration: none;
+  color: inherit;
+}
+
+@media (min-width: 52rem) {
+  .careLink {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: var(--space-l);
+    align-items: baseline;
+  }
+}
+
+.careTitle {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  line-height: 1.14;
+  color: var(--botanic-900);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.careSummary {
+  display: block;
+  color: var(--text-muted);
+  max-width: 52ch;
+}
+
+.careLink:hover .careTitle { color: var(--botanic-600); }
+
+/* A leaf that appears on hover only — a quiet cue, not a permanent icon */
+.careLeaf {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 1.6rem;
+  color: var(--leaf-500);
+  opacity: 0;
+  transform: translate(-6px, -50%);
+  transition: opacity var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+}
+
+.careItem { position: relative; }
+
+@media (min-width: 52rem) {
+  .careLeaf { display: block; }
+}
+
+.careLink:hover .careLeaf,
+.careLink:focus-visible .careLeaf {
+  opacity: 1;
+  transform: translate(0, -50%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .careLeaf,
+  .careTitle { transition: none; }
+  .careLink:hover .careLeaf { transform: translate(0, -50%); }
+}
+
+/* ------------------------------------------------------------ founder */
+
+.founder {
+  display: grid;
+  gap: var(--space-l) var(--space-2xl);
+  grid-template-columns: 1fr;
+  align-items: center;
+}
+
+@media (min-width: 56rem) {
+  .founder { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+}
+
+/* A leaf medallion rather than another generic round avatar */
+.founderMedallion {
+  position: relative;
+  aspect-ratio: 1;
+  width: 100%;
+  max-width: 19rem;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-l);
+  background:
+    radial-gradient(120% 90% at 28% 18%, var(--sage-200), transparent 64%),
+    linear-gradient(160deg, var(--sage-100), var(--sage-300));
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.founderSprig {
+  position: absolute;
+  left: -14%;
+  bottom: -6%;
+  width: 58%;
+  color: var(--botanic-600);
+  opacity: 0.35;
+}
+
+.founderName {
+  font-size: var(--step-3);
+  color: var(--botanic-900);
+}
+
+.founderRole {
+  margin-top: 0.35rem;
+  font-size: var(--step-0);
+  font-weight: 600;
+  font-stretch: 92%;
+  color: var(--botanic-600);
+}
+
+.founderBody {
+  margin-top: var(--space-s);
+  color: var(--text-muted);
+  max-width: 52ch;
+}
+
+/* -------------------------------------------------------------- closing */
+
+.ctaInner {
+  position: relative;
+  z-index: 2;
+  padding-block: var(--space-2xl);
+  max-width: 44rem;
+}
+
+.ctaTitle {
+  font-size: var(--step-4);
+  font-weight: 400;
+  color: #f6fbff;
+}
+
+.ctaBody {
+  margin-top: var(--space-s);
+  color: var(--glass-300);
+  max-width: 42ch;
+}
+
+.ctaActions {
+  margin-top: var(--space-l);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
