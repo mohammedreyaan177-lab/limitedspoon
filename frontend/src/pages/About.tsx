@@ -1,4 +1,4 @@
-import { useEffect, useRef, type PointerEvent as ReactPointerEvent } from 'react';
+import { useRef, type PointerEvent as ReactPointerEvent } from 'react';
 import { AnchorButton, ButtonLink } from '../components/Button';
 import { HeroLeaf, LeafField, LeafSprig } from '../components/Botanical';
 import { Logo } from '../components/Logo';
@@ -6,12 +6,6 @@ import { Reveal } from '../components/Reveal';
 import layout from '../components/layout.module.css';
 import { CARE_AREAS, CONTACT, FOUNDER, SITE } from '../config/site';
 import styles from './page.module.css';
-
-function usePageTitle(title: string) {
-  useEffect(() => {
-    document.title = `${title} — ${SITE.name}`;
-  }, [title]);
-}
 
 /**
  * One fact, as a panel that tips toward the pointer.
@@ -77,8 +71,6 @@ function FactPanel({
 }
 
 export default function About() {
-  usePageTitle('About');
-
   return (
     <>
       {/* Cream editorial hero with a leaf medallion — the warmest route */}

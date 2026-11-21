@@ -1,16 +1,9 @@
-import { useEffect } from 'react';
 import { AnchorButton, ButtonLink } from '../components/Button';
 import { HeroLeaf, LeafField, PlateMark } from '../components/Botanical';
 import { Reveal } from '../components/Reveal';
 import layout from '../components/layout.module.css';
-import { CONTACT, EDUCATION, PRINCIPLES, SITE } from '../config/site';
+import { CONTACT, EDUCATION, PRINCIPLES } from '../config/site';
 import styles from './page.module.css';
-
-function usePageTitle(title: string) {
-  useEffect(() => {
-    document.title = `${title} — ${SITE.name}`;
-  }, [title]);
-}
 
 const STEPS = [
   {
@@ -83,8 +76,6 @@ function StanceGyroscope() {
 }
 
 export default function Approach() {
-  usePageTitle('Approach');
-
   return (
     <>
       {/* Airy light herbal hero — deliberately the opposite of the home glass */}

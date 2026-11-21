@@ -3,6 +3,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { Footer } from './Footer';
 import { Header } from './Header';
 import { Intro } from './Intro';
+import { SEOHead } from './SEOHead';
 
 /**
  * Puts the viewport at the top, on a fresh load and on every route change.
@@ -52,6 +53,7 @@ export function Layout({ heroHeader = false }: LayoutProps) {
         Skip to content
       </a>
       <ScrollToTop />
+      <SEOHead />
       <Header hero={heroHeader} />
       <main id="main" tabIndex={-1} key={pathname}>
         <Outlet />

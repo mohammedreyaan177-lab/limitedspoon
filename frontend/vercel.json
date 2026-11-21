@@ -8,17 +8,17 @@
     {
       "source": "/index.html",
       "destination": "/",
-      "permanent": false
+      "permanent": true
     },
     {
       "source": "/home",
       "destination": "/",
-      "permanent": false
+      "permanent": true
     },
     {
       "source": "/home/:path*",
       "destination": "/",
-      "permanent": false
+      "permanent": true
     }
   ],
   "rewrites": [

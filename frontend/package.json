@@ -6,7 +6,7 @@
   "description": "Marketing website for Limited Spoon Wellness — nutritional & dietetic centre.",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && node scripts/generate-seo-assets.mjs",
     "preview": "vite preview",
     "lint": "eslint .",
     "typecheck": "tsc -b --noEmit false --pretty",

@@ -22,8 +22,41 @@ export const SITE = {
   stance: 'Wellness > quick fixes',
   description:
     'Limited Spoon Wellness is a nutritional and dietetic centre offering personalised nutrition care — from weight management and PCOS to diabetes, pre & post-natal, geriatric and cardiopulmonary nutrition.',
-  url: 'https://limitedspoon.wellness',
+  /** Set VITE_SITE_URL to the purchased production origin at deployment. */
+  url: (import.meta.env.VITE_SITE_URL ?? '').replace(/\/+$/, ''),
   locale: 'en_IN',
+} as const;
+
+export const PAGE_SEO = {
+  '/': {
+    title: 'Personalised Nutrition Care — Limited Spoon Wellness',
+    description:
+      'Explore personalised nutrition care for weight management, PCOS, diabetes, pregnancy, older adults and everyday wellness. Enquire with Limited Spoon Wellness.',
+  },
+  '/approach': {
+    title: 'A Personalised Nutrition Approach — Limited Spoon Wellness',
+    description:
+      'See how Limited Spoon Wellness shapes nutrition guidance around your routine, preferences and medical context, with adjustments for real life.',
+  },
+  '/care': {
+    title: 'Nutrition Care Areas — Limited Spoon Wellness',
+    description:
+      'Explore nutrition support for weight management, PCOS, diabetes, pre- and post-natal needs, older adults, cardiopulmonary care and everyday wellness.',
+  },
+  '/about': {
+    title: 'About Limited Spoon Wellness and Shalini Selvakumar',
+    description:
+      'Meet Shalini Selvakumar, Clinical & Wellness Nutritionist and founder of Limited Spoon Wellness, and learn about the practice.',
+  },
+  '/contact': {
+    title: 'Contact Limited Spoon Wellness — Start an Enquiry',
+    description:
+      'Start a nutrition enquiry with Limited Spoon Wellness. The practice’s published contact channel is Instagram.',
+  },
+  '*': {
+    title: `Page not found — ${SITE.name}`,
+    description: '',
+  },
 } as const;
 
 export const CONTACT = {

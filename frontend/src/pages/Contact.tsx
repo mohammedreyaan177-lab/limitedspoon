@@ -1,17 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { AnchorButton, Button } from '../components/Button';
 import { GrowthRings } from '../components/Botanical';
 import { Reveal } from '../components/Reveal';
 import layout from '../components/layout.module.css';
-import { CARE_AREAS, CONTACT, SITE } from '../config/site';
+import { CARE_AREAS, CONTACT } from '../config/site';
 import styles from './Contact.module.css';
 import page from './page.module.css';
-
-function usePageTitle(title: string) {
-  useEffect(() => {
-    document.title = `${title} — ${SITE.name}`;
-  }, [title]);
-}
 
 type FieldName = 'name' | 'email' | 'phone' | 'topic' | 'message' | 'consent';
 
@@ -75,8 +69,6 @@ function composeBody(v: Values): string {
  * Either way the visitor leaves with their message intact.
  */
 export default function Contact() {
-  usePageTitle('Contact');
-
   const [values, setValues] = useState<Values>(EMPTY);
   const [errors, setErrors] = useState<Errors>({});
   const [submitted, setSubmitted] = useState(false);

@@ -1,13 +1,7 @@
-import { useEffect } from 'react';
 import { ButtonLink } from '../components/Button';
 import layout from '../components/layout.module.css';
-import { SITE } from '../config/site';
 
 export default function NotFound() {
-  useEffect(() => {
-    document.title = `Page not found — ${SITE.name}`;
-  }, []);
-
   return (
     <section className={`${layout.section} ${layout.surfaceDeep}`}>
       <div className={layout.container}>

@@ -6,6 +6,8 @@ export interface LogoProps {
   /** Approx rendered width in px. The asset is 765x677, so anything at or
    *  below ~382px stays crisp on a 2x display. */
   width?: number;
+  /** Fetch immediately for the opening brand intro and persistent header. */
+  priority?: boolean;
   className?: string;
 }
 
@@ -30,7 +32,7 @@ export interface LogoProps {
  * interior is genuinely transparent, so on a dark ground the knockout reads as
  * a white outline rather than a solid blob.
  */
-export function Logo({ tone = 'dark', width = 54, className }: LogoProps) {
+export function Logo({ tone = 'dark', width = 54, priority = false, className }: LogoProps) {
   return (
     <img
       src="/brand/logo.png"
@@ -40,6 +42,7 @@ export function Logo({ tone = 'dark', width = 54, className }: LogoProps) {
       className={[styles.logo, tone === 'light' ? styles.light : '', className].filter(Boolean).join(' ')}
       style={{ width: `${width}px` }}
       decoding="async"
+      loading={priority ? 'eager' : 'lazy'}
     />
   );
 }

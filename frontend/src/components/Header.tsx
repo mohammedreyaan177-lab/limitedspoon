@@ -85,7 +85,7 @@ export function Header({ hero = false }: { hero?: boolean }) {
     <header className={headerClass} data-testid="site-header">
       <div className={`${layout.container} ${styles.inner}`}>
         <Link to="/" className={styles.homeLink} aria-label={`${SITE.name} — home`}>
-          <Logo tone={hero && !scrolled ? 'light' : 'dark'} width={54} />
+          <Logo tone={hero && !scrolled ? 'light' : 'dark'} width={54} priority />
         </Link>
 
         <nav className={styles.desktopNav} aria-label="Primary">

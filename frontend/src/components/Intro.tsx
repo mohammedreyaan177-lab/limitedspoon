@@ -101,7 +101,7 @@ export function Intro({ disabled = false }: IntroProps) {
             centre. The CSS caps its width and scales it down on narrow
             viewports. */}
         <span className={styles.mark}>
-          <Logo width={382} className={styles.markImg} />
+          <Logo width={382} className={styles.markImg} priority />
         </span>
 
         <div className={styles.caption}>

@@ -1,21 +1,12 @@
-import { useEffect } from 'react';
 import { AnchorButton, ButtonLink } from '../components/Button';
 import { LeafField } from '../components/Botanical';
 import { Produce, ProduceCluster } from '../components/Produce';
 import { Reveal } from '../components/Reveal';
 import layout from '../components/layout.module.css';
-import { CARE_AREAS, CARE_ART, CONTACT, SITE } from '../config/site';
+import { CARE_AREAS, CARE_ART, CONTACT } from '../config/site';
 import styles from './page.module.css';
 
-function usePageTitle(title: string) {
-  useEffect(() => {
-    document.title = `${title} — ${SITE.name}`;
-  }, [title]);
-}
-
 export default function Care() {
-  usePageTitle('Areas of care');
-
   return (
     <>
       {/* Deep-green index hero — the darkest header band on the site */}
