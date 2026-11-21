@@ -2,7 +2,8 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { loadEnv } from 'vite';
 import { createElement } from 'react';
-import { renderToString } from 'react-dom/server';
+import { renderToPipeableStream } from 'react-dom/server';
+import { PassThrough } from 'node:stream';
 import { StaticRouter } from 'react-router-dom';
 
 const env = { ...loadEnv('production', process.cwd(), ''), ...process.env };
@@ -39,6 +40,30 @@ const vite = await (await import('vite')).createServer({
   server: { middlewareMode: true },
 });
 const { AppRoutes } = await vite.ssrLoadModule('/src/App.tsx');
+const renderToString = (element) => new Promise((resolveRender, rejectRender) => {
+  const output = new PassThrough();
+  let markup = '';
+  let renderError;
+  output.setEncoding('utf8');
+  output.on('data', (chunk) => { markup += chunk; });
+  output.on('end', () => {
+    if (renderError) rejectRender(renderError);
+    else resolveRender(markup);
+  });
+  output.on('error', rejectRender);
+
+  const stream = renderToPipeableStream(element, {
+    onAllReady() {
+      stream.pipe(output);
+    },
+    onShellError(error) {
+      rejectRender(error);
+    },
+    onError(error) {
+      renderError ??= error;
+    },
+  });
+});
 const escapeHtml = (value) => value
   .replaceAll('&', '&amp;')
   .replaceAll('"', '&quot;')
@@ -58,7 +83,7 @@ for (const route of routes) {
   const canonical = `${origin}${route}`;
   const image = `${origin}/brand/logo.png`;
   let html = baseHtml.replace(/<title>[^<]*<\/title>/i, `<title>${escapeHtml(page.title)}</title>`);
-  const renderedPage = renderToString(createElement(StaticRouter, { location: route }, createElement(AppRoutes)));
+  const renderedPage = await renderToString(createElement(StaticRouter, { location: route }, createElement(AppRoutes)));
   html = html.replace('<div id="root"></div>', `<div id="root">${renderedPage}</div>`);
   html = setMeta(html, 'name', 'description', page.description);
   html = setMeta(html, 'name', 'robots', 'index,follow');
@@ -120,7 +145,7 @@ for (const route of routes) {
 }
 
 let notFoundHtml = baseHtml.replace(/<title>[^<]*<\/title>/i, `<title>${escapeHtml(pageSeo['*'].title)}</title>`);
-const renderedNotFound = renderToString(createElement(StaticRouter, { location: '/__not_found__' }, createElement(AppRoutes)));
+const renderedNotFound = await renderToString(createElement(StaticRouter, { location: '/__not_found__' }, createElement(AppRoutes)));
 notFoundHtml = notFoundHtml.replace('<div id="root"></div>', `<div id="root">${renderedNotFound}</div>`);
 notFoundHtml = setMeta(notFoundHtml, 'name', 'description', 'The page you requested could not be found.');
 notFoundHtml = setMeta(notFoundHtml, 'name', 'robots', 'noindex,follow');

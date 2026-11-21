@@ -1,16 +1,19 @@
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { Layout } from './components/Layout';
-import Home from './pages/Home';
-import Approach from './pages/Approach';
-import Care from './pages/Care';
-import About from './pages/About';
-import Contact from './pages/Contact';
-import NotFound from './pages/NotFound';
+
+const Home = lazy(() => import('./pages/Home'));
+const Approach = lazy(() => import('./pages/Approach'));
+const Care = lazy(() => import('./pages/Care'));
+const About = lazy(() => import('./pages/About'));
+const Contact = lazy(() => import('./pages/Contact'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
 /** Shared route tree for browser navigation and static production rendering. */
 export function AppRoutes() {
   return (
-    <Routes>
+    <Suspense fallback={null}>
+      <Routes>
         {/* Home sits on the glass hero, so its header is transparent at rest */}
         <Route element={<Layout heroHeader />}>
           <Route index element={<Home />} />
@@ -35,7 +38,8 @@ export function AppRoutes() {
           <Route path="contact" element={<Contact />} />
           <Route path="*" element={<NotFound />} />
       </Route>
-    </Routes>
+      </Routes>
+    </Suspense>
   );
 }
 
