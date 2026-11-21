@@ -100,7 +100,7 @@ Connect Google through the official OAuth flow in [OpenSEO Search Performance](h
 - src/pages/Care.tsx, src/pages/page.module.css — attach the contrast rule to the shared kicker class.
 - src/components/Logo.tsx — responsive WebP source set with PNG fallback and alt text.
 - public/brand/logo-*.webp — content-versioned responsive logo derivatives.
-- vercel.json — long-lived immutable caching for fingerprinted WebP assets.
+- vercel.json — long-lived immutable caching for brand assets.
 - SEO_PROJECT_ANALYSIS.md, SEO_FINAL_REPORT.md — verified deployment findings and updated Lighthouse evidence.
 
 ## Next actions
