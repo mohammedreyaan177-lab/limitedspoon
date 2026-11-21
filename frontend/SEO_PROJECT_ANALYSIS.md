@@ -31,9 +31,9 @@ No login, dashboard, API, or authenticated route was found. No pagination, produ
 
 ## Live SEO verification on 21 November 2026
 
-The live `www` origin returned HTTP 200 for all five public routes, `/robots.txt`, `/sitemap.xml`, and `/brand/logo.png`. `robots.txt` allows crawling and references `https://www.limitedspoon.online/sitemap.xml`. The sitemap is valid XML with exactly the five intended `www` canonical URLs and no invented `lastmod` values. The five-page JavaScript-rendered OpenSEO crawl found 0 crawler issues: each page was indexable, returned 200, had a unique title and description, one H1, and no missing image alt text.
+The live `www` origin returned HTTP 200 for all five public routes, `/robots.txt`, `/sitemap.xml`, and the published logo. `robots.txt` allows crawling and references `https://www.limitedspoon.online/sitemap.xml`. The sitemap is valid XML with exactly the five intended `www` canonical URLs and no invented `lastmod` values. The five-page JavaScript-rendered OpenSEO crawl found 0 crawler issues: each page was indexable, returned 200, had a unique title and description, one H1, and no missing image alt text.
 
-An important gap remained in the deployed build's unrendered HTML: direct requests to secondary routes returned the generic homepage `<title>` and `og:url`, with no route self-canonical. The hydrated page corrected these values, which is why the JavaScript-rendered crawl saw correct metadata. The current repository changes address this with pre-rendered route HTML; those changes are not yet deployed, so this fix is pending production verification.
+The deployed build now returns route-specific pre-rendered bodies and SEO metadata on direct requests. Live checks confirmed canonical, Open Graph URL, Twitter URL, and WebPage JSON-LD on each secondary page match its exact self URL. A nonexistent URL returns HTTP 404 with the generated noindex page. Legacy homepage aliases remain permanent redirects. The post-deploy audit completed on 21 November 2026.
 
 ## Current search visibility evidence
 
@@ -52,6 +52,6 @@ Keyword estimates fetched for India on 21 November 2026: `dietitian online India
 
 ## Performance, accessibility, and remaining evidence gaps
 
-The live Lighthouse sample ran before the pre-render changes. Eight of ten tests returned; the homepage desktop/mobile requests timed out. On mobile, Lighthouse reported performance scores of 78–83, CLS about 0.296 on the four returned secondary pages, LCP about 3.16 seconds on `/approach` and `/care` and about 2.14 seconds on `/about` and `/contact`; INP was not reported. Lighthouse SEO scores were 100. The `/care` mobile sample reported one color-contrast issue in its dark hero. A local CSS correction now gives the kicker a light foreground; a new production run is needed to verify it. These are lab results, not field Core Web Vitals.
+Post-deploy Lighthouse audit 247d018c-8995-4683-85f8-a03de0cf2878 returned 8 of 10 tests; the homepage desktop and mobile requests timed out. SEO scores were 100 on every returned route/device. Mobile performance ranged 90–98; CLS was about 0.000006 on each. LCP ranged from 2.31–3.42 seconds. The contact page's mobile LCP was 3.42s (performance 90); the care page mobile sample still reported contrast 96 because the prior selector did not match a class from the shared layout module. Lighthouse flagged about 177 KB of logo image savings, 55 KiB unused JavaScript, and a render-blocking stylesheet with an estimated 150 ms savings. A corrected care kicker class and responsive WebP logo sizes are now implemented locally; they require a deployment and retest. INP was not returned. These are lab results, not field Core Web Vitals.
 
 Not measured: field Core Web Vitals, Google indexing status, submitted sitemap state, GA4 or conversion data, Schema.org / Rich Results Test results, and the post-change production crawl. No SEO change guarantees rankings or indexing.

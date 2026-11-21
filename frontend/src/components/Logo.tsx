@@ -34,15 +34,24 @@ export interface LogoProps {
  */
 export function Logo({ tone = 'dark', width = 54, priority = false, className }: LogoProps) {
   return (
-    <img
-      src="/brand/logo.png"
-      alt="Limited Spoon Wellness — Nutritional & Dietetic Centre"
-      width={765}
-      height={677}
-      className={[styles.logo, tone === 'light' ? styles.light : '', className].filter(Boolean).join(' ')}
-      style={{ width: `${width}px` }}
-      decoding="async"
-      loading={priority ? 'eager' : 'lazy'}
-    />
+    <picture>
+      <source
+        type="image/webp"
+        srcSet="/brand/logo-128.8f3a2d.webp 128w, /brand/logo-256.8f3a2d.webp 256w, /brand/logo-512.8f3a2d.webp 512w, /brand/logo-765.8f3a2d.webp 765w"
+        sizes={`${width}px`}
+      />
+      <img
+        src="/brand/logo.png"
+        srcSet="/brand/logo.png 765w"
+        sizes={`${width}px`}
+        alt="Limited Spoon Wellness — Nutritional & Dietetic Centre"
+        width={765}
+        height={677}
+        className={[styles.logo, tone === 'light' ? styles.light : '', className].filter(Boolean).join(' ')}
+        style={{ width: `${width}px` }}
+        decoding="async"
+        loading={priority ? 'eager' : 'lazy'}
+      />
+    </picture>
   );
 }

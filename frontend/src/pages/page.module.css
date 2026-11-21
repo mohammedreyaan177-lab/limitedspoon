@@ -81,7 +81,7 @@
 }
 
 .careHero h1 { color: var(--sage-50); }
-.careHero .kicker { color: var(--sage-300); }
+.careKicker { color: var(--sage-300); }
 
 .careHeroInner {
   position: relative;

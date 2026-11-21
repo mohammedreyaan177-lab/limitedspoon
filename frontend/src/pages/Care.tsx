@@ -15,7 +15,7 @@ export default function Care() {
         <div className={layout.container}>
           <div className={styles.careHeroInner}>
             <Reveal>
-              <p className={layout.kicker}>Areas of care</p>
+              <p className={`${layout.kicker} ${styles.careKicker}`}>Areas of care</p>
               <h1 style={{ fontSize: 'var(--step-4)', maxWidth: '16ch' }}>
                 What we work with
               </h1>
