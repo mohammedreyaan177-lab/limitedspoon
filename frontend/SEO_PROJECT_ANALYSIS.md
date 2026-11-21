@@ -11,9 +11,9 @@ The practice's verified positioning adapts nutrition guidance to a person's rout
 - React 19, TypeScript 5.9, Vite 7, React Router 7; deployed as static files on Vercel.
 - No backend, database, API, authentication, GA4, or private routes were found.
 - Shared business facts and care-area copy are in `src/config/site.ts`; page metadata is in `src/config/page-seo.json`.
-- Public layout uses self-hosted Archivo and Fraunces fonts, a transparent PNG logo, SVG favicon and illustrations, and a WebGL hero with a CSS fallback.
+- Public layout uses self-hosted Archivo and Fraunces fonts, responsive WebP logo variants with a PNG fallback/social image, an SVG favicon and illustrations, and a WebGL hero with a CSS fallback.
 - Production `VITE_SITE_URL` is `https://www.limitedspoon.online`. The Vite config and asset generator reject any other or missing production value.
-- The production build now statically renders each public route into its own HTML file, with route-specific body content, title, description, robots directive, canonical, Open Graph, Twitter, and JSON-LD before React hydrates. Vercel `cleanUrls` serves the extensionless routes; a generated `404.html` is `noindex,follow`. `robots.txt` and `sitemap.xml` are generated from the page registry.
+- The production build streams static rendering of each public route into its own HTML file, with route-specific body content, title, description, robots directive, canonical, Open Graph, Twitter, and JSON-LD before React hydrates. Browser page components load in route-specific chunks. Vercel `cleanUrls` serves the extensionless routes; a generated `404.html` is `noindex,follow`. `robots.txt` and `sitemap.xml` are generated from the page registry.
 
 ## Route inventory
 
@@ -33,7 +33,7 @@ No login, dashboard, API, or authenticated route was found. No pagination, produ
 
 The live `www` origin returned HTTP 200 for all five public routes, `/robots.txt`, `/sitemap.xml`, and the published logo. `robots.txt` allows crawling and references `https://www.limitedspoon.online/sitemap.xml`. The sitemap is valid XML with exactly the five intended `www` canonical URLs and no invented `lastmod` values. The five-page JavaScript-rendered OpenSEO crawl found 0 crawler issues: each page was indexable, returned 200, had a unique title and description, one H1, and no missing image alt text.
 
-The deployed build now returns route-specific pre-rendered bodies and SEO metadata on direct requests. Live checks confirmed canonical, Open Graph URL, Twitter URL, and WebPage JSON-LD on each secondary page match its exact self URL. A nonexistent URL returns HTTP 404 with the generated noindex page. Legacy homepage aliases remain permanent redirects. The post-deploy audit completed on 21 November 2026.
+The deployed build now returns route-specific pre-rendered bodies and SEO metadata on direct requests. Live checks confirmed canonical, Open Graph URL, Twitter URL, and WebPage JSON-LD on each secondary page match its exact self URL. A nonexistent URL returns HTTP 404 with the generated noindex page. Legacy homepage aliases remain permanent redirects. The latest crawl on 21 November 2026 covered 5/5 pages with 0 issues. Browser page components are split into route chunks while the build streams prerendered HTML for crawlers.
 
 ## Current search visibility evidence
 
@@ -52,6 +52,6 @@ Keyword estimates fetched for India on 21 November 2026: `dietitian online India
 
 ## Performance, accessibility, and remaining evidence gaps
 
-Post-deploy Lighthouse audit 247d018c-8995-4683-85f8-a03de0cf2878 returned 8 of 10 tests; the homepage desktop and mobile requests timed out. SEO scores were 100 on every returned route/device. Mobile performance ranged 90–98; CLS was about 0.000006 on each. LCP ranged from 2.31–3.42 seconds. The contact page's mobile LCP was 3.42s (performance 90); the care page mobile sample still reported contrast 96 because the prior selector did not match a class from the shared layout module. Lighthouse flagged about 177 KB of logo image savings, 55 KiB unused JavaScript, and a render-blocking stylesheet with an estimated 150 ms savings. A corrected care kicker class and responsive WebP logo sizes are now implemented locally; they require a deployment and retest. INP was not returned. These are lab results, not field Core Web Vitals.
+The latest successful Lighthouse run after the logo and care contrast changes (audit ccd8c7c5-ed98-4d09-8244-e9724a0ad9ee) returned 8 of 10 results. Secondary-route SEO and accessibility scores were 100; desktop performance was 100 and mobile performance was 95–96. CLS was about 0.000006; secondary-page mobile LCP was 2.70–2.87 seconds. The care-page contrast issue is corrected and its accessibility score rose from 96 to 100. Lighthouse flagged about 55 KiB of unused JavaScript, a render-blocking stylesheet estimated at 150 ms, and about 76 KiB of logo image savings. The responsive WebP assets and immutable cache policy are now live. A subsequent route-bundle split reduced the local build entry from 343.87 KB raw / 108.60 KB gzip to 284.53 KB raw / 91.28 KB gzip, with route-specific chunks. Lighthouse rerun after that final change failed for all 10 samples: 9 reported INSUFFICIENT_CREDITS and 1 timed out. No post-split performance effect is claimed. These are lab results, not field Core Web Vitals.
 
-Not measured: field Core Web Vitals, Google indexing status, submitted sitemap state, GA4 or conversion data, Schema.org / Rich Results Test results, and the post-change production crawl. No SEO change guarantees rankings or indexing.
+Not measured: field Core Web Vitals, Google indexing status, submitted sitemap state, GA4 or conversion data, Schema.org / Rich Results Test results, and post-split Lighthouse performance. No SEO change guarantees rankings or indexing.

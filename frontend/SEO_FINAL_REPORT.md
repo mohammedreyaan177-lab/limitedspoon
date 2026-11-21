@@ -6,7 +6,7 @@ Limited Spoon Wellness is a founder-led nutrition practice led by Shalini Selvak
 
 ## Verdict
 
-The deployed production site has five crawlable pages, route-specific pre-rendered page content and SEO metadata, working robots and sitemap files, and a real HTTP 404 for unknown paths. The post-deploy crawl found 0 crawler issues. SEO Lighthouse scores were 100 for all eight successful route/device samples, and CLS was effectively zero. Search performance and indexing cannot yet be assessed because an authorized Search Console account is not connected. One contact-page mobile lab result remains slower (LCP 3.42s, performance 90); a logo optimization and care-page contrast fix are prepared locally and await the next deployment and retest.
+The deployed production site has five crawlable pages, route-specific pre-rendered content and SEO metadata, split page bundles, working robots and sitemap files, and a real HTTP 404 for unknown paths. The latest post-deploy crawl found 0 crawler issues. A successful Lighthouse run after the logo and contrast changes reported SEO 100 and accessibility 100 for every returned secondary-page sample, with effectively zero CLS. The further bundle-splitting change is deployed, but its Lighthouse rerun could not complete because OpenSEO reported insufficient provider credits. Search performance and indexing cannot yet be assessed because no authorized Search Console account is connected.
 
 ## Route inventory and indexation
 
@@ -50,20 +50,20 @@ Metrics are provider estimates, not expected traffic. No search volumes are inve
 
 ## Performance and accessibility
 
-Post-deployment Lighthouse audit 247d018c-8995-4683-85f8-a03de0cf2878 returned 8 of 10 route/device samples; both homepage requests timed out.
+The successful post-logo/contrast Lighthouse audit ccd8c7c5-ed98-4d09-8244-e9724a0ad9ee returned eight of ten samples; the homepage desktop timed out and homepage mobile reported insufficient provider credits. This run preceded the final route-bundle split.
 
 | Page/device | Performance | Accessibility | SEO | LCP | CLS |
 |---|---:|---:|---:|---:|---:|
-| /about desktop | 100 | 100 | 100 | 0.61s | 0.000006 |
-| /about mobile | 97 | 100 | 100 | 2.41s | 0.000006 |
-| /approach desktop | 100 | 100 | 100 | 0.57s | 0.000006 |
-| /approach mobile | 97 | 100 | 100 | 2.41s | 0.000006 |
-| /care desktop | 100 | 95 | 100 | 0.58s | 0.000006 |
-| /care mobile | 98 | 96 | 100 | 2.31s | 0.000006 |
-| /contact desktop | 100 | 100 | 100 | 0.52s | 0.000006 |
-| /contact mobile | 90 | 100 | 100 | 3.42s | 0.000006 |
+| /about desktop | 100 | 100 | 100 | 0.57s | 0.000007 |
+| /about mobile | 95 | 100 | 100 | 2.87s | 0.000006 |
+| /approach desktop | 100 | 100 | 100 | 0.67s | 0.000007 |
+| /approach mobile | 95 | 100 | 100 | 2.85s | 0.000006 |
+| /care desktop | 100 | 100 | 100 | 0.56s | 0.000006 |
+| /care mobile | 96 | 100 | 100 | 2.73s | 0.000006 |
+| /contact desktop | 100 | 100 | 100 | 0.55s | 0.000007 |
+| /contact mobile | 96 | 100 | 100 | 2.70s | 0.000006 |
 
-These are lab results, not field Core Web Vitals. INP was not returned; the homepage Lighthouse requests timed out. Lighthouse flagged the care hero's low-contrast kicker, the 192 KB logo's image delivery and caching, about 55 KiB of unused JavaScript, and a render-blocking stylesheet estimated at 150 ms. The repository now corrects the kicker selector and supplies responsive, content-hashed WebP logo variants while preserving the PNG social image. Those final local refinements still need a Vercel deployment and production retest. No performance result is claimed for them yet.
+These are lab results, not field Core Web Vitals. INP was not returned. After the contrast change, the care route reached accessibility 100. The new responsive WebP logo and one-year immutable cache policy are live; a mobile logo variant returned 200 at 10.4 KB. Before route splitting, Lighthouse still estimated 55 KiB of unused JavaScript and 150 ms for render-blocking CSS, with mobile LCP at 2.70–2.87 seconds on secondary routes. A subsequent bundle-splitting implementation is live: the production build reduced the entry bundle from 343.87 KB raw / 108.60 KB gzip to 284.53 KB raw / 91.28 KB gzip and split page chunks by route. The Lighthouse rerun after this last change could not measure performance: all 10 samples failed, nine for INSUFFICIENT_CREDITS and one timed out. No post-split performance improvement is claimed. Field Core Web Vitals remain unavailable.
 
 ## Google Search Console
 
@@ -89,7 +89,9 @@ Connect Google through the official OAuth flow in [OpenSEO Search Performance](h
 | Unknown URL response | COMPLETED AND VERIFIED | Returns HTTP 404 with noindex,follow |
 | Five-page technical crawl | COMPLETED AND VERIFIED | 5/5 pages, zero crawler issues |
 | Post-deployment Lighthouse | COMPLETED AND VERIFIED | Eight route/device samples; SEO 100, near-zero CLS; homepage timed out |
-| Responsive optimized logo and care contrast correction | IMPLEMENTED BUT NOT VERIFIED | Local sources and image variants build successfully; production retest pending |
+| Responsive WebP logo, immutable cache, and care contrast correction | COMPLETED AND VERIFIED | Production image request returns 200, image/webp, 1-year immutable cache; Lighthouse care accessibility 100 |
+| Per-route JavaScript code splitting | COMPLETED AND VERIFIED | Vercel deployed the split build; production crawl remains clean; local build shows smaller entry bundle and page chunks |
+| Lighthouse after final bundle split | BLOCKED | OpenSEO/DataForSEO returned INSUFFICIENT_CREDITS for 9 samples and timeout for 1; earlier Lighthouse run is reported above |
 | Current local production build, lint, and tests | COMPLETED AND VERIFIED | Build and lint passed; 33 existing tests passed |
 | Search Console connection, indexing, performance, sitemap submission | PENDING USER ACTION | Authorized OAuth account must be connected first |
 | Schema validator and Rich Results Test | PENDING USER ACTION | External validation not run |
@@ -101,11 +103,12 @@ Connect Google through the official OAuth flow in [OpenSEO Search Performance](h
 - src/components/Logo.tsx — responsive WebP source set with PNG fallback and alt text.
 - public/brand/logo-*.webp — content-versioned responsive logo derivatives.
 - vercel.json — long-lived immutable caching for brand assets.
+- src/App.tsx, scripts/generate-seo-assets.mjs — split browser route bundles while preserving streamed static prerendering.
 - SEO_PROJECT_ANALYSIS.md, SEO_FINAL_REPORT.md — verified deployment findings and updated Lighthouse evidence.
 
 ## Next actions
 
-1. Deploy these validated refinements and rerun the Lighthouse audit to check the logo savings and care contrast result.
+1. Re-run Lighthouse when the OpenSEO/DataForSEO provider has credits available; use field data in Search Console/CrUX when it becomes available.
 2. Connect Search Console using OpenSEO OAuth; inspect exact property, sitemap, URL indexing, and query/page performance.
 3. Confirm appointment format and service area before adding commercial/local landing pages or LocalBusiness data.
 4. Supply the GA4 property and consent requirements if conversion measurement is wanted.
