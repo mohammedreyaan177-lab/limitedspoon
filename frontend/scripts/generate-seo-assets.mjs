@@ -1,6 +1,9 @@
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { loadEnv } from 'vite';
+import { createElement } from 'react';
+import { renderToString } from 'react-dom/server';
+import { StaticRouter } from 'react-router-dom';
 
 const env = { ...loadEnv('production', process.cwd(), ''), ...process.env };
 const configuredUrl = env.VITE_SITE_URL?.trim();
@@ -24,9 +27,112 @@ if (configuredUrl) {
   origin = parsed.origin;
 }
 
-const routes = ['/', '/approach', '/care', '/about', '/contact'];
 const outputDirectory = resolve(process.cwd(), 'dist');
 await mkdir(outputDirectory, { recursive: true });
+
+const pageSeo = JSON.parse(await readFile(resolve(process.cwd(), 'src/config/page-seo.json'), 'utf8'));
+const routes = Object.keys(pageSeo).filter((route) => route !== '*');
+const vite = await (await import('vite')).createServer({
+  configFile: resolve(process.cwd(), 'vite.config.ts'),
+  appType: 'custom',
+  logLevel: 'error',
+  server: { middlewareMode: true },
+});
+const { AppRoutes } = await vite.ssrLoadModule('/src/App.tsx');
+const escapeHtml = (value) => value
+  .replaceAll('&', '&amp;')
+  .replaceAll('"', '&quot;')
+  .replaceAll('<', '&lt;')
+  .replaceAll('>', '&gt;');
+const replaceOrInsert = (html, pattern, tag) => pattern.test(html)
+  ? html.replace(pattern, tag)
+  : html.replace('</head>', `    ${tag}\n  </head>`);
+const setMeta = (html, attribute, key, value) => {
+  const pattern = new RegExp(`<meta\\b(?=[^>]*\\b${attribute}=["']${key}["'])[^>]*>`, 'i');
+  const tag = `<meta ${attribute}="${key}" content="${escapeHtml(value)}" />`;
+  return replaceOrInsert(html, pattern, tag);
+};
+const baseHtml = await readFile(resolve(outputDirectory, 'index.html'), 'utf8');
+for (const route of routes) {
+  const page = pageSeo[route];
+  const canonical = `${origin}${route}`;
+  const image = `${origin}/brand/logo.png`;
+  let html = baseHtml.replace(/<title>[^<]*<\/title>/i, `<title>${escapeHtml(page.title)}</title>`);
+  const renderedPage = renderToString(createElement(StaticRouter, { location: route }, createElement(AppRoutes)));
+  html = html.replace('<div id="root"></div>', `<div id="root">${renderedPage}</div>`);
+  html = setMeta(html, 'name', 'description', page.description);
+  html = setMeta(html, 'name', 'robots', 'index,follow');
+  html = replaceOrInsert(html, /<link\b(?=[^>]*\brel=["']canonical["'])[^>]*>/i,
+    `<link rel="canonical" href="${canonical}" />`);
+  html = setMeta(html, 'property', 'og:title', page.title);
+  html = setMeta(html, 'property', 'og:description', page.description);
+  html = setMeta(html, 'property', 'og:type', 'website');
+  html = setMeta(html, 'property', 'og:site_name', 'Limited Spoon Wellness');
+  html = setMeta(html, 'property', 'og:locale', 'en_IN');
+  html = setMeta(html, 'property', 'og:url', canonical);
+  html = setMeta(html, 'property', 'og:image', image);
+  html = setMeta(html, 'property', 'og:image:alt', 'Limited Spoon Wellness logo');
+  html = setMeta(html, 'name', 'twitter:card', 'summary');
+  html = setMeta(html, 'name', 'twitter:title', page.title);
+  html = setMeta(html, 'name', 'twitter:description', page.description);
+  html = setMeta(html, 'name', 'twitter:url', canonical);
+  html = setMeta(html, 'name', 'twitter:image', image);
+
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Organization',
+        '@id': `${origin}/#organization`,
+        name: 'Limited Spoon Wellness',
+        url: origin,
+        description: 'Limited Spoon Wellness is a nutritional and dietetic centre offering personalised nutrition care — from weight management and PCOS to diabetes, pre & post-natal, geriatric and cardiopulmonary nutrition.',
+        logo: image,
+        sameAs: ['https://www.instagram.com/limitedspoon.wellness/'],
+      },
+      {
+        '@type': 'WebSite',
+        '@id': `${origin}/#website`,
+        url: origin,
+        name: 'Limited Spoon Wellness',
+        inLanguage: 'en-IN',
+        publisher: { '@id': `${origin}/#organization` },
+      },
+      {
+        '@type': 'WebPage',
+        '@id': `${canonical}#webpage`,
+        url: canonical,
+        name: page.title,
+        description: page.description,
+        isPartOf: { '@id': `${origin}/#website` },
+        inLanguage: 'en-IN',
+      },
+    ],
+  };
+  const schemaScript = `<script id="site-structured-data" type="application/ld+json">${JSON.stringify(structuredData).replaceAll('<', '\\u003c')}</script>`;
+  html = replaceOrInsert(html, /<script\b[^>]*id=["']site-structured-data["'][^>]*>[\s\S]*?<\/script>/i, schemaScript);
+
+  if (route === '/') {
+    await writeFile(resolve(outputDirectory, 'index.html'), html, 'utf8');
+  } else {
+    await writeFile(resolve(outputDirectory, `${route.slice(1)}.html`), html, 'utf8');
+  }
+}
+
+let notFoundHtml = baseHtml.replace(/<title>[^<]*<\/title>/i, `<title>${escapeHtml(pageSeo['*'].title)}</title>`);
+const renderedNotFound = renderToString(createElement(StaticRouter, { location: '/__not_found__' }, createElement(AppRoutes)));
+notFoundHtml = notFoundHtml.replace('<div id="root"></div>', `<div id="root">${renderedNotFound}</div>`);
+notFoundHtml = setMeta(notFoundHtml, 'name', 'description', 'The page you requested could not be found.');
+notFoundHtml = setMeta(notFoundHtml, 'name', 'robots', 'noindex,follow');
+notFoundHtml = setMeta(notFoundHtml, 'property', 'og:title', pageSeo['*'].title);
+notFoundHtml = setMeta(notFoundHtml, 'property', 'og:description', 'The page you requested could not be found.');
+notFoundHtml = setMeta(notFoundHtml, 'name', 'twitter:title', pageSeo['*'].title);
+notFoundHtml = setMeta(notFoundHtml, 'name', 'twitter:description', 'The page you requested could not be found.');
+notFoundHtml = notFoundHtml.replace(/<link\b(?=[^>]*\brel=["']canonical["'])[^>]*>/i, '');
+notFoundHtml = notFoundHtml.replace(/<meta\b(?=[^>]*\b(?:property=["']og:url["']|name=["']twitter:url["']))[^>]*>/gi, '');
+notFoundHtml = notFoundHtml.replace(/<script\b[^>]*id=["']site-structured-data["'][^>]*>[\s\S]*?<\/script>/i, '');
+await writeFile(resolve(outputDirectory, '404.html'), notFoundHtml, 'utf8');
+await vite.close();
 
 const robots = [
   'User-agent: *',
@@ -53,3 +159,5 @@ const sitemap = [
 ].join('\n');
 await writeFile(resolve(outputDirectory, 'sitemap.xml'), sitemap, 'utf8');
 console.log(`Generated robots.txt and sitemap.xml for ${origin}`);
+console.log(`Generated pre-rendered route HTML for ${routes.length} public pages`);
+console.log('Generated a noindex 404 page');

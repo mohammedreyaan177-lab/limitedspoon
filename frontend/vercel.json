@@ -3,6 +3,7 @@
   "framework": "vite",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
+  "cleanUrls": true,
   "installCommand": "npm install",
   "redirects": [
     {
@@ -19,12 +20,6 @@
       "source": "/home/:path*",
       "destination": "/",
       "permanent": true
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/((?!assets/|brand/|fonts/|favicon|robots|sitemap|manifest).*)",
-      "destination": "/index.html"
     }
   ],
   "headers": [

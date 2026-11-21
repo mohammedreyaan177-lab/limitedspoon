@@ -1,75 +1,57 @@
 # SEO project analysis
 
-## Project overview
+## Project and business
 
-Limited Spoon Wellness is a founder-led nutritional and dietetic practice. The website explains personalised nutrition care, the practice's approach and seven observed areas of care, introduces founder Shalini Selvakumar, and directs enquiries to the published Instagram account. It is a marketing site, not an ecommerce or packaged-food site.
+Limited Spoon Wellness is a founder-led nutrition practice led by Shalini Selvakumar, identified on the site as a Clinical & Wellness Nutritionist. The website describes personalised nutrition care for weight management, PCOS, diabetes, pre- and post-natal nutrition, geriatric nutrition, cardiopulmonary care, and everyday wellness. The intended conversion is an enquiry; Instagram is the only verified published contact channel. The owner confirmed India as the intended market. A city, service radius, online/in-person availability, clinic address, fees, hours, phone, credentials beyond the published role, and clinical outcomes remain unverified.
 
-## Technology and architecture
+The practice's verified positioning adapts nutrition guidance to a person's routine, preferences, and medical context, avoids extreme changes, and complements rather than replaces medical care. The site is not a shop, food product catalogue, or editorial blog.
 
-- Frontend: React 19, TypeScript 5.9, Vite 7, React Router 7.
-- Rendering and deployment: client-rendered SPA, Vercel static build (`dist`); secondary pages use `React.lazy`.
-- Backend/database/API/authentication: none found. No private application routes.
-- Content: centralized in `src/config/site.ts`, with source notes in `docs/brand-research.md`.
-- Assets: self-hosted Archivo and Fraunces fonts, SVG favicon, PNG brand logo, procedural SVG illustrations, and a WebGL rain-glass hero. No blog, product catalogue, service detail routes, or real photography.
-- Existing deployment behavior: Vercel redirects `/home` and `/index.html`; unknown paths are rewritten to the SPA. No current robots file, sitemap, manifest, canonical, structured data, or social metadata was found.
+## Stack and architecture
 
-## Business, audience, and intent
-
-The verified proposition is individualised nutrition guidance across weight management, PCOS, diabetes, pre- and post-natal nutrition, geriatric nutrition, cardiopulmonary care, and everyday wellness. The intended next action is to start an enquiry or message the practice on Instagram.
-
-The site copy and locale (`en_IN`) suggest English-speaking visitors in India, but no city, service area, clinic address, phone, hours, fees, session format, or professional credentials beyond “Clinical & Wellness Nutritionist” are verified. Do not add local business markup or location keywords until the owner confirms these facts. The owner confirmed the production origin as `https://www.limitedspoon.online`. DNS resolves the `www` host to Vercel; the live `/robots.txt` and `/sitemap.xml` endpoints returned 404 when checked, so serving the new SEO assets on the live deployment remains unverified. The older `https://limitedspoon.wellness` value has been removed.
-
-Differentiators supported by the content: plans are adapted to a person's routine and preferences; the tone avoids extreme changes and pressure; nutrition support is positioned alongside medical care, not as a replacement. No outcomes, guarantees, testimonials, certifications, or statistics are claimed.
+- React 19, TypeScript 5.9, Vite 7, React Router 7; deployed as static files on Vercel.
+- No backend, database, API, authentication, GA4, or private routes were found.
+- Shared business facts and care-area copy are in `src/config/site.ts`; page metadata is in `src/config/page-seo.json`.
+- Public layout uses self-hosted Archivo and Fraunces fonts, a transparent PNG logo, SVG favicon and illustrations, and a WebGL hero with a CSS fallback.
+- Production `VITE_SITE_URL` is `https://www.limitedspoon.online`. The Vite config and asset generator reject any other or missing production value.
+- The production build now statically renders each public route into its own HTML file, with route-specific body content, title, description, robots directive, canonical, Open Graph, Twitter, and JSON-LD before React hydrates. Vercel `cleanUrls` serves the extensionless routes; a generated `404.html` is `noindex,follow`. `robots.txt` and `sitemap.xml` are generated from the page registry.
 
 ## Route inventory
 
-Metadata below is proposed. Canonicals and sitemap entries use `https://www.limitedspoon.online`. All listed public routes have one visible H1. No page-specific structured data beyond shared `Organization` and `WebSite` entities is justified by current verified information.
+| Route | Purpose and intent | SEO decision |
+|---|---|---|
+| `/` | Introduce the practice; broad personalised nutrition and brand intent | Index; self-canonical; homepage title and description; `WebPage` schema |
+| `/approach` | Explain how guidance is adapted to routine, preferences, and medical context | Index; self-canonical; unique title and description; `WebPage` schema |
+| `/care` | One hub for all seven observed care areas | Index; self-canonical; unique title and description; `WebPage` schema; seven in-page anchors |
+| `/about` | Practice and founder information | Index; self-canonical; verified founder role only; `WebPage` schema |
+| `/contact` | Enquiry and verified Instagram contact path | Index; self-canonical; unique title and description; `WebPage` schema |
+| `*` | Styled not-found page | Noindex; excluded from sitemap; generated `404.html` intended for HTTP 404 handling |
+| `/home`, `/home/*`, `/index.html` | Legacy home aliases | Permanent redirect to `/`; excluded from sitemap |
 
-| Route | Purpose and audience | Search intent / keyword theme | Proposed title | Proposed description | H1 | Indexability / canonical |
-|---|---|---|---|---|---|---|
-| `/` | Introduce the practice and lead to care areas or enquiry | Commercial / personalised nutrition care; nutritionist | Personalised Nutrition Care — Limited Spoon Wellness | Explore personalised nutrition care for weight management, PCOS, diabetes, pregnancy, older adults and everyday wellness. Enquire with Limited Spoon Wellness. | Nourish. Transform. Thrive. | Index; canonical `https://www.limitedspoon.online/` |
-| `/approach` | Explain how nutrition plans are tailored | Informational / personalised nutrition plan; sustainable nutrition guidance | A Personalised Nutrition Approach — Limited Spoon Wellness | See how Limited Spoon Wellness shapes nutrition guidance around your routine, preferences and medical context, with adjustments for real life. | A plan that survives an ordinary week. | Index; canonical `https://www.limitedspoon.online/approach` |
-| `/care` | Describe the seven verified areas of care | Commercial / nutrition support for each listed care area | Nutrition Care Areas — Limited Spoon Wellness | Explore nutrition support for weight management, PCOS, diabetes, pre- and post-natal needs, older adults, cardiopulmonary care and everyday wellness. | What we work with | Index; canonical `https://www.limitedspoon.online/care` |
-| `/about` | Introduce the centre and its founder | Navigational / Limited Spoon Wellness; Shalini Selvakumar nutritionist | About Limited Spoon Wellness and Shalini Selvakumar | Meet Shalini Selvakumar, Clinical & Wellness Nutritionist and founder of Limited Spoon Wellness, and learn about the practice. | Limited Spoon, and the person behind it. | Index; canonical `https://www.limitedspoon.online/about` |
-| `/contact` | Help visitors begin an enquiry | Transactional / contact nutritionist; nutrition enquiry | Contact Limited Spoon Wellness — Start an Enquiry | Start a nutrition enquiry with Limited Spoon Wellness. The practice's published contact channel is Instagram. | Start a conversation | Index; canonical `https://www.limitedspoon.online/contact` |
-| `*` | Helpful not-found page | None | Page not found — Limited Spoon Wellness | No search snippet target. | This page has drained away. | Noindex; no canonical or sitemap entry |
-| `/home`, `/home/*`, `/index.html` | Legacy aliases for home | None | N/A | N/A | N/A | Redirect to `/`; exclude from sitemap |
+No login, dashboard, API, or authenticated route was found. No pagination, product, location, article, or duplicate content families exist.
 
-## Existing SEO implementation
+## Live SEO verification on 21 November 2026
 
-- `index.html` includes a useful homepage title, description, viewport, theme colour, favicon, and font preloads.
-- Other route titles are changed client-side with `document.title`; descriptions, canonicals, Open Graph, and Twitter metadata are absent.
-- Navigation is crawlable anchor-based routing, but the site is client-rendered, so initial HTML for deep links does not include route content or route metadata.
-- No `robots.txt`, XML sitemap, web manifest, or JSON-LD exists.
-- The homepage and footer provide contextual links to the core routes. The care page has in-page anchors for all seven areas. No editorial/blog routes exist.
-- Images are mostly local SVG/PNG and decorative SVG. Logo has descriptive alt text; the rain canvas is hidden from assistive technology. Hero uses CSS/WebGL rather than an `<img>` LCP candidate.
-- Existing route split, locally hosted fonts, and no analytics/third-party embeds support a small initial payload. No Lighthouse/field CWV measurements are included in the repository.
+The live `www` origin returned HTTP 200 for all five public routes, `/robots.txt`, `/sitemap.xml`, and `/brand/logo.png`. `robots.txt` allows crawling and references `https://www.limitedspoon.online/sitemap.xml`. The sitemap is valid XML with exactly the five intended `www` canonical URLs and no invented `lastmod` values. The five-page JavaScript-rendered OpenSEO crawl found 0 crawler issues: each page was indexable, returned 200, had a unique title and description, one H1, and no missing image alt text.
 
-## SEO issues found in the original implementation
+An important gap remained in the deployed build's unrendered HTML: direct requests to secondary routes returned the generic homepage `<title>` and `og:url`, with no route self-canonical. The hydrated page corrected these values, which is why the JavaScript-rendered crawl saw correct metadata. The current repository changes address this with pre-rendered route HTML; those changes are not yet deployed, so this fix is pending production verification.
 
-1. Client-only route metadata means deep routes share the same initial HTML shell.
-2. No canonical URLs or share metadata.
-3. No sitemap/robots files were present; the sitemap host was unknown during the initial audit. The confirmed production origin is now configured.
-4. SPA catch-all renders a styled 404 but does not inherently send an HTTP 404 from static Vercel hosting.
-5. Alias redirects were configured as temporary and have been changed to permanent redirects.
-6. Production host is `https://www.limitedspoon.online`; confirm the live deployment serves the generated files.
-7. Page-specific titles/descriptions need central management and more useful snippets.
+## Current search visibility evidence
 
-## Missing information and research limits
+OpenSEO's India domain overview and domain-level ranked-keyword sample returned no measurable organic traffic or ranked keywords, and its backlink provider found no referring domains. These provider results are estimates and may miss a new or low-volume site. Four same-day Google India SERP samples did not include the domain in the first 20 results for `PCOS nutritionist India`, `online dietitian India`, `nutritionist for diabetes India`, or `prenatal nutritionist India`. Search Console is not connected, so there is no first-party clicks, impressions, query, or indexing evidence.
 
-- City/service area, online versus in-person availability, and launch status.
-- City/service area and whether care is online, in-person, or both.
-- Approved business contact details, service formats/prices and founder qualifications.
-- Google Search Console and Analytics access/data.
-- No authenticated Keyword Planner, Search Console, or Trends data was available. Keyword recommendations are intent-based themes derived from the actual page content; search volumes and difficulty are deliberately not claimed. General web search did not surface a reliable official domain or measurable keyword data.
-- Live DNS resolves to Vercel, but `/robots.txt` returned 404; a production crawl and route checks remain unavailable until the updated deployment serves the files.
+Keyword estimates fetched for India on 21 November 2026: `dietitian online India` — 50 estimated monthly searches, commercial intent, KD 50; `PCOS nutritionist India` — 10, informational intent, KD unavailable; `pregnancy nutritionist India` — 10, commercial intent, KD unavailable. Estimates are directional, not measured demand. Do not target online or city-based terms until the practice confirms those service details.
 
-## Recommended SEO architecture
+## Technical SEO implementation
 
-- Keep route metadata in one typed registry and update title, description, canonical, Open Graph, Twitter card, and robots directives on navigation.
-- Use the confirmed origin from `.env.production` as `VITE_SITE_URL`, with a build guard against Vercel preview or apex overrides.
-- Generate sitemap XML from the indexable route registry during build, and a permissive robots file with a sitemap reference when the origin is present.
-- Add shared `Organization` and `WebSite` JSON-LD using only verified entity data; omit `LocalBusiness`, ratings, FAQs, and health-outcome claims.
-- Mark the 404 `noindex`; keep the contact route indexable because it is a public enquiry page.
-- Consider static pre-rendering for the five marketing routes in a later architecture change. Current implementation is Vite SPA and has no SSR/prerender setup; don't add a second rendering stack blindly.
-- Revisit regional targeting only after confirming the service geography. Do not add city pages or local schema without evidence.
+- Central route metadata in `src/config/page-seo.json` is consumed by React and the build-time generator.
+- `SEOHead` maintains metadata during client-side navigation, including self-referencing canonical URLs, `index,follow` for known routes and `noindex,follow` for unknown ones, social metadata, and JSON-LD.
+- The production build statically renders each route and creates page-specific initial HTML for crawlers and social link unfurlers. The React app hydrates that HTML.
+- Structured data is limited to `Organization`, `WebSite`, and route-specific `WebPage` entities with the canonical `www` URLs, published logo, description, and Instagram `sameAs`. No unsupported LocalBusiness, ratings, reviews, FAQ, credentials, or health outcome claims are used.
+- The build creates five canonical sitemap entries and a permissive robots file with the sitemap reference. Legacy homepage aliases remain permanent redirects.
+- `vercel.json` uses clean URLs and no catch-all rewrite, so emitted route files can be served directly and an unknown route can fall through to the not-found document.
+
+## Performance, accessibility, and remaining evidence gaps
+
+The live Lighthouse sample ran before the pre-render changes. Eight of ten tests returned; the homepage desktop/mobile requests timed out. On mobile, Lighthouse reported performance scores of 78–83, CLS about 0.296 on the four returned secondary pages, LCP about 3.16 seconds on `/approach` and `/care` and about 2.14 seconds on `/about` and `/contact`; INP was not reported. Lighthouse SEO scores were 100. The `/care` mobile sample reported one color-contrast issue in its dark hero. A local CSS correction now gives the kicker a light foreground; a new production run is needed to verify it. These are lab results, not field Core Web Vitals.
+
+Not measured: field Core Web Vitals, Google indexing status, submitted sitemap state, GA4 or conversion data, Schema.org / Rich Results Test results, and the post-change production crawl. No SEO change guarantees rankings or indexing.

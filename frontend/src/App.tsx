@@ -1,29 +1,16 @@
-import { lazy, Suspense } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import Home from './pages/Home';
-import { RouteLoader } from './components/RouteLoader';
+import Approach from './pages/Approach';
+import Care from './pages/Care';
+import About from './pages/About';
+import Contact from './pages/Contact';
+import NotFound from './pages/NotFound';
 
-/* Route-split so first paint ships the hero and the glass, not every page. */
-const Approach = lazy(() => import('./pages/Approach'));
-const Care = lazy(() => import('./pages/Care'));
-const About = lazy(() => import('./pages/About'));
-const Contact = lazy(() => import('./pages/Contact'));
-const NotFound = lazy(() => import('./pages/NotFound'));
-
-/** Wraps a lazy route so Suspense never has to be repeated. */
-function lazyRoute(Component: React.ComponentType) {
+/** Shared route tree for browser navigation and static production rendering. */
+export function AppRoutes() {
   return (
-    <Suspense fallback={<RouteLoader />}>
-      <Component />
-    </Suspense>
-  );
-}
-
-export function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
+    <Routes>
         {/* Home sits on the glass hero, so its header is transparent at rest */}
         <Route element={<Layout heroHeader />}>
           <Route index element={<Home />} />
@@ -42,13 +29,20 @@ export function App() {
         </Route>
 
         <Route element={<Layout />}>
-          <Route path="approach" element={lazyRoute(Approach)} />
-          <Route path="care" element={lazyRoute(Care)} />
-          <Route path="about" element={lazyRoute(About)} />
-          <Route path="contact" element={lazyRoute(Contact)} />
-          <Route path="*" element={lazyRoute(NotFound)} />
-        </Route>
-      </Routes>
+          <Route path="approach" element={<Approach />} />
+          <Route path="care" element={<Care />} />
+          <Route path="about" element={<About />} />
+          <Route path="contact" element={<Contact />} />
+          <Route path="*" element={<NotFound />} />
+      </Route>
+    </Routes>
+  );
+}
+
+export function App() {
+  return (
+    <BrowserRouter>
+      <AppRoutes />
     </BrowserRouter>
   );
 }

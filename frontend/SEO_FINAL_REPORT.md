@@ -1,107 +1,99 @@
-# SEO implementation report
+# SEO verification report — 21 November 2026
 
-## 1. Project understanding
+## Project overview
 
-Limited Spoon Wellness is a founder-led nutrition practice offering personalised nutrition care across seven areas: weight management, PCOS, diabetes, pre- and post-natal nutrition, geriatric nutrition, cardiopulmonary care, and everyday wellness. The public site introduces the practice and its approach, describes the care areas, introduces founder Shalini Selvakumar, and invites enquiries through Instagram. No location, prices, clinical outcomes, testimonials, or credentials beyond the published role are asserted.
+Limited Spoon Wellness is a founder-led nutrition practice led by Shalini Selvakumar, described as a Clinical & Wellness Nutritionist. The practice's site covers weight management, PCOS, diabetes, pre- and post-natal nutrition, geriatric nutrition, cardiopulmonary care, and everyday wellness. India is the owner-confirmed target market; a city, service area, online/in-person format, fees, and additional qualifications remain unconfirmed. The only verified public contact channel is Instagram.
 
-The copy suggests an English-speaking audience and the project declares `en_IN`, but the actual service geography is unverified. The production origin is `https://www.limitedspoon.online`; its `www` DNS record resolves to Vercel.
+## Verdict
 
-## 2. Technical SEO
+The production domain is live and its five public routes, robots file, and sitemap are crawlable. The five-page live crawl found no SEO crawler issues. However, live deep-route responses still expose homepage-only metadata before JavaScript runs, and no Search Console data is accessible. A local implementation now pre-renders route-specific metadata and body content, fixes a dark-hero contrast issue, and emits a proper noindex 404 document. These changes passed a production build and 33 tests but are not deployed yet.
 
-- Added a single route metadata registry for the five public routes and the not-found route.
-- Added a route-aware head manager that updates title, description, canonical, robots, Open Graph, Twitter metadata, and JSON-LD on navigation.
-- Added generic `Organization`, `WebSite`, and page-specific `WebPage` JSON-LD only when a production origin is configured. No LocalBusiness, ratings, FAQ, or unsupported credential claims are emitted.
-- Added a build step that creates an allow-all `robots.txt` and an XML sitemap with the five canonical public routes on the confirmed `www` origin, plus a sitemap reference. No invented `lastmod` dates are included.
-- Changed `/home`, `/home/*`, and `/index.html` Vercel redirects to permanent redirects.
-- Marked unknown routes `noindex,follow` and excluded them from the sitemap.
-- Added social metadata defaults to the HTML shell and a production logo image reference to route metadata when the origin is known.
-- Added lazy loading for non-priority logo instances while keeping the intro and header logo eager. Existing image dimensions and descriptive logo alt text remain in place.
-- Existing internal navigation exposes all core pages; the care hub links to each of its seven section anchors. No broken-link crawler or live HTTP status audit was available.
+## Live verification
 
-**Production origin:** `https://www.limitedspoon.online` is configured in `.env.production` and used as the only production base. The Vite config and SEO asset generator reject production builds when `VITE_SITE_URL` is unset or overridden with a different host, preventing preview-domain or apex-domain URLs from being emitted. The older `https://limitedspoon.wellness` value has been removed. The local production build generated five sitemap URLs, all on the `www` host, plus a robots sitemap reference. DNS resolves the `www` host to Vercel, but live requests to `/robots.txt` and `/sitemap.xml` returned 404 at audit time; serving this build in production remains unverified.
+- Live HTTP checks returned 200 for `/`, `/approach`, `/care`, `/about`, `/contact`, `/robots.txt`, `/sitemap.xml`, and `/brand/logo.png` on `https://www.limitedspoon.online`.
+- `robots.txt` allows crawling and points to `https://www.limitedspoon.online/sitemap.xml`.
+- The XML sitemap contains exactly five public canonical URLs on the `www` hostname. It contains no invented `lastmod` values.
+- The JavaScript-rendered OpenSEO crawl completed 5/5 pages with 0 issues. All pages returned 200, were indexable, had unique titles/descriptions, one H1, and zero images missing alt text.
+- Raw live HTML for secondary routes still showed the homepage title and `og:url`, without a route-specific canonical. Hydration corrects the page head, but link preview bots and crawlers that do not run the app see the generic shell.
 
-**SPA limitation:** route metadata is set client-side after React loads. Vite currently serves one HTML shell for deep links and does not pre-render route body content or route-specific metadata in the initial response. Google can render JavaScript, but other crawlers and link preview bots may not. Static pre-rendering or SSR is a future architecture option; it was not introduced without evaluating the existing Vite SPA constraints.
+## Search visibility and keyword findings
 
-The Vercel catch-all serves the SPA shell for unknown paths, so this static setup does not independently guarantee an HTTP 404 response for unknown routes. The client marks the styled 404 page `noindex`.
+The India domain overview and domain-level ranked-keyword sample returned no measurable organic traffic or ranked keywords. The provider found no referring domains. These third-party estimates may miss a new or low-volume site; they are not Search Console data.
 
-## 3. On-page SEO
+Same-day India SERP reads did not show Limited Spoon in the first 20 results for the sampled queries: `PCOS nutritionist India`, `online dietitian India`, `nutritionist for diabetes India`, and `prenatal nutritionist India`. On the PCOS query, pcosdietician.in appeared at #6 (page 1) on all three reads. On online dietitian India, medindia.net appeared at #2 on all three reads. On prenatal nutritionist India, momkidcare.com appeared at #1 on all three reads. Results are automated snapshots, not historical positions.
 
-Unique titles and descriptions are mapped for Home, Approach, Areas of Care, About, and Contact in `src/config/site.ts`. Existing readable headings and page content were retained rather than forcing keywords into copy. The 404 has a distinct title and noindex directive. The title and description strategy is documented page by page in `SEO_PROJECT_ANALYSIS.md`.
+| India query | Estimated monthly volume | Intent | Difficulty | Interpretation |
+|---|---:|---|---:|---|
+| `dietitian online India` | 50 | Commercial | 50 | Best measured commercial query in this limited batch. Do not target until the owner confirms online care is offered. |
+| `PCOS nutritionist India` | 10 | Informational | Unavailable | Low measured demand; `/care` can continue to cover PCOS without a thin duplicate page. |
+| `pregnancy nutritionist India` | 10 | Commercial | Unavailable | Supports pregnancy/postpartum coverage on `/care`; do not promise services or outcomes beyond verified copy. |
+| `nutritionist for diabetes India` | Unavailable | Unavailable | Unavailable | Live result page is crowded with directories and individual practices; volume was not measurable in the source. |
 
-Existing internal links connect the home page to care, about, approach, and contact content. No blog or additional service pages were created because the project has no separate article content and the practice's verified detail supports one consolidated care hub.
+No volumes are added across related terms. Search volume is an estimate, not expected clicks. Search Console queries and landing pages are unavailable until the correct Google property is connected.
 
-## 4. Keyword strategy
+## Technical SEO implementation and findings
 
-Intent-based themes are mapped in `SEO_KEYWORD_MAP.md`. Examples include personalised nutrition care for the home page, personalised nutrition approach for `/approach`, nutrition care areas and condition-specific support for `/care`, branded/founder terms for `/about`, and enquiry/contact terms for `/contact`.
+The project already configures `VITE_SITE_URL=https://www.limitedspoon.online`, rejects a mismatched production host, and generates robots and sitemap assets from the production origin. Its live robots and sitemap endpoints work and use only the exact production `www` host.
 
-No search volumes, ranking difficulty, or competition values are claimed. Google Search Console, Keyword Planner, and Trends data were unavailable. Geography is unconfirmed, so no city or “near me” keyword map was created.
+The live JavaScript crawl saw correct page-specific titles and descriptions, but initial HTML on secondary routes remained the homepage shell. The local implementation now:
 
-## 5. Structured data
+- Stores titles/descriptions in a shared JSON registry consumed by React and build generation.
+- Builds static HTML for each route with its own rendered page body, title, description, canonical, robots, OG/Twitter tags, and Organization/WebSite/WebPage JSON-LD.
+- Hydrates those pre-rendered pages in the browser.
+- Emits a styled `404.html` with `noindex,follow`, no canonical, and no structured data.
+- Sets Vercel `cleanUrls` and removes the catch-all rewrite so emitted static pages can serve their extensionless routes and unknown paths can use the 404 document.
+- Leaves the sitemap at five routes; legacy `/home`, `/home/*`, and `/index.html` redirects remain permanent.
 
-Shared `Organization` and `WebSite` entities plus a route-specific `WebPage` entity are prepared in JSON-LD. They include only the practice name, verified description, website origin, logo, and published Instagram profile. Structured data uses the confirmed `www` origin in the production build; it has not been checked with Google's Rich Results Test or Schema.org Validator because the live deployment did not serve `/robots.txt` at audit time.
+Structured data contains only verified organization/site/page facts and the published Instagram profile. No LocalBusiness, reviews, ratings, FAQs, credentials, or unsupported health outcomes are asserted. The new pre-rendered JSON-LD is not yet production-validated through Schema.org or Google's Rich Results Test.
 
-## 6. Performance
+## On-page and mobile
 
-No Lighthouse, PageSpeed Insights, or field Core Web Vitals measurements were collected in this implementation, so no performance improvement is claimed. Existing safeguards include locally hosted fonts, route splitting, no analytics or third-party embeds, and lazy loading below-fold logo images. INP, LCP, CLS, server response time, and production caching still require measurement after deployment.
+Each of the five public pages has a unique title and description, one H1 in the live crawl, five internal links, and no missing image alt text. `/care` remains one hub for its seven verified service areas to avoid thin or overlapping pages. On mobile, Lighthouse gave Accessibility 100 for `/approach`, `/about`, and `/contact`, and 96 for `/care` because the dark hero kicker failed contrast. A local light-text CSS override addresses that finding; a production retest is pending.
 
-## 7. Google Search Console
+## Performance results (live build before local changes)
 
-The OpenSEO project was created for the site, but no Google account with Search Console access is connected. The property list, indexing reports, sitemap submission, and search performance data could not be read. Connect an authorized account at [OpenSEO Search Performance](https://app.openseo.so/p/103588e8-a4f5-49a2-854c-652587cd223a/search-performance), then continue with the verified property. No submission or indexing request is claimed.
+Lighthouse returned 8 of 10 page/device results; both homepage requests timed out. It reported SEO score 100 on the returned pages and best-practices scores 100. Mobile performance scores were 78–83. Mobile LCP was about 3.17 seconds for `/approach` and `/care`, and about 2.14 seconds for `/about` and `/contact`. Mobile CLS was about 0.296 on all four returned pages; desktop CLS was about 0.145–0.294. This is lab data from the audit run, not field Core Web Vitals. INP was not returned. The local static-render change is intended to improve early content availability and layout stability, but performance improvement is not claimed until a deployed retest.
 
-## 8. Files changed
+## Google Search Console
 
-- `SEO_PROJECT_ANALYSIS.md` — project/route audit, existing SEO, risks, and recommended architecture.
-- `SEO_KEYWORD_MAP.md` — intent-based keyword and page mapping with research limits.
-- `SEO_FINAL_REPORT.md` — implementation summary, validation, pending actions, and scorecard.
-- `src/config/site.ts` — environment-based site origin and per-route titles/descriptions.
-- `src/components/SEOHead.tsx` — route-level metadata, canonicals, robots directives, social tags, and JSON-LD.
-- `src/components/Layout.tsx` — mounts the shared route metadata manager.
-- `src/pages/{Approach,Care,About,Contact,NotFound}.tsx` — removes competing title effects so centralized metadata controls each route.
-- `src/components/Logo.tsx`, `src/components/Header.tsx`, `src/components/Intro.tsx` — priority-aware logo loading.
-- `index.html` — homepage social metadata defaults.
-- `scripts/generate-seo-assets.mjs` — build-time robots and sitemap generator.
-- `.env.production` — exact production origin used by local and Vercel production builds.
-- `vite.config.ts` — rejects builds that attempt to use an unset or different production origin.
-- `package.json` — runs the SEO asset generator after the production build.
-- `vercel.json` — makes the legacy home aliases permanent redirects.
+No Google account with Search Console access is connected to the OpenSEO workspace. Therefore the property list, ownership/permissions, clicks, impressions, CTR, average position, index coverage, URL inspection, and existing sitemap submissions could not be checked. No sitemap submission or indexing request is claimed.
 
-## 9. Pending user actions
+Connect the authorized Google account through [OpenSEO Search Performance](https://app.openseo.so/p/103588e8-a4f5-49a2-854c-652587cd223a/search-performance). Then select the verified `https://www.limitedspoon.online/` URL-prefix property or matching verified domain property. Inspect existing sitemap status before submitting `https://www.limitedspoon.online/sitemap.xml`; inspect the homepage, `/care`, `/approach`, and `/contact` before requesting indexing.
 
-1. Connect Vercel or complete GitHub authentication so the local production commit on `master` can be pushed. Git Credential Manager waited for sign-in and the connected GitHub integration rejected the tree write with HTTP 403. No deployment was created.
-2. After deployment, verify HTTPS, the `www` host, redirects, `/robots.txt`, and `/sitemap.xml`. Both live SEO file URLs currently return 404.
-3. Connect a Google account with Search Console access through [OpenSEO Search Performance](https://app.openseo.so/p/103588e8-a4f5-49a2-854c-652587cd223a/search-performance), confirm the exact `https://www.limitedspoon.online/` property, then submit `/sitemap.xml` and inspect key URLs.
-4. Share authorized Search Console access if performance and indexing analysis is wanted. Google Analytics is not configured; add it only if the practice chooses an analytics property and consent approach.
-5. Confirm service geography and online/in-person availability before adding local targeting or local business structured data.
-6. Confirm contact details, service formats, prices, founder credentials, whether privacy/terms pages are required, and the approved strapline as listed in `docs/brand-research.md`.
-7. Consider supplying a dedicated social-sharing image with an appropriate landscape aspect ratio; current metadata uses the verified logo asset.
-8. Pursue legitimate outreach to relevant nutrition/health publications and professional directories after credentials and geography are confirmed. No external links or listings have been submitted.
+## Files changed for this follow-up
 
-## 10. Remaining issues
+- `src/config/page-seo.json` — shared route title/description source.
+- `src/config/site.ts` — imports shared route metadata.
+- `src/App.tsx` — shared direct route tree for browser use and static rendering.
+- `src/main.tsx` — hydrates static HTML and retains client-render fallback for development.
+- `src/pages/page.module.css` — improves kicker contrast on the dark care hero.
+- `scripts/generate-seo-assets.mjs` — pre-renders public route HTML and a noindex 404 alongside robots and sitemap generation.
+- `vercel.json` — clean URLs and no catch-all rewrite.
+- `SEO_PROJECT_ANALYSIS.md`, `SEO_KEYWORD_MAP.md`, `SEO_FINAL_REPORT.md` — updated analysis and dated evidence.
 
-- Deployment is blocked until Vercel/GitHub write access is connected; the local commit has not reached the remote branch.
-- The live Vercel deployment returned 404 for `/robots.txt` and `/sitemap.xml`; confirm that a deployment containing this build is serving the files.
-- Route-specific head tags are client-rendered; no static prerender/SSR is configured.
-- 404 HTTP status is not guaranteed by the static SPA rewrite.
-- No live production crawl, broken external link crawl, redirect-chain check, structured-data validator run, social image fetch check, or field/lab performance measurement was available.
-- Search Console and Analytics status are unknown.
-- There is no blog/resource section, so informational keyword expansion would need new practice-reviewed content.
-
-## 11. SEO completion scorecard
+## Status scorecard
 
 | Task | Status | Evidence / next step |
 |---|---|---|
-| Project and route discovery | Completed and verified | Source, route, content, and deployment files inspected; see project analysis. |
-| Page inventory and intent mapping | Completed and verified | `SEO_PROJECT_ANALYSIS.md` and `SEO_KEYWORD_MAP.md`. |
-| Unique route titles/descriptions | Implemented but not independently verified in a live crawl | Central route registry; client-side route head updates. |
-| Canonical URLs and absolute social URLs | Completed and verified in local production build | All SEO URLs use `https://www.limitedspoon.online`; conflicting production overrides fail the build. |
-| robots.txt | Implemented and locally verified; live serving unverified | `dist/robots.txt` allows crawling and references the exact sitemap; live endpoint returned 404. |
-| XML sitemap | Completed and verified in local production build | Valid XML contains five public routes, all on the exact `www` host. |
-| 404 noindex and sitemap exclusion | Implemented but not independently verified in production | Unknown routes receive `noindex,follow`; not in route list. HTTP 404 status remains a hosting limitation. |
-| Structured data | Implemented but not independently verified | JSON-LD generated at runtime only with origin; external validator pending deployment. |
-| Mobile/accessibility foundations | Previously verified by project QA; not re-audited on live deployment | Existing responsive and accessibility implementation preserved; 33 automated tests passed. |
-| Performance/CWV | Pending measurement | No Lighthouse or field data available. |
-| Google Search Console | Pending user action | No Google account is connected to the OpenSEO project; connect the verified property, then inspect URLs and submit the sitemap. |
-| Production deployment | Pending user action | Local commit is ready; Git credential flow awaited sign-in and GitHub tree write returned 403. Connect Vercel or GitHub write access. |
-| Local SEO | Not applicable pending geography confirmation | Do not infer a city, address, or service area. |
-| Off-page outreach | Pending user action | No backlinks or external submissions claimed. |
-| Build, lint, tests | Completed and verified | Build passed; ESLint passed; 33 tests passed. Existing jsdom canvas warnings appeared during tests. |
+| Exact production origin | COMPLETED AND VERIFIED | Build configuration is locked to `https://www.limitedspoon.online`; live robots and sitemap use `www`. |
+| Live routes, robots, sitemap | COMPLETED AND VERIFIED | 7 public route/asset endpoint checks returned HTTP 200; sitemap has 5 canonical URLs. |
+| Five-page technical crawl | COMPLETED AND VERIFIED | OpenSEO JavaScript crawl: 5/5 pages, 0 issues. |
+| Route-specific raw HTML metadata and content | IMPLEMENTED BUT NOT VERIFIED | Local production build generates route HTML and JSON-LD; deploy then verify raw production responses. |
+| Noindex 404 behavior | IMPLEMENTED BUT NOT VERIFIED | `dist/404.html` generated; verify Vercel returns it with HTTP 404 after deployment. |
+| Contrast correction | IMPLEMENTED BUT NOT VERIFIED | Local `.careHero .kicker` contrast override; production Lighthouse retest pending. |
+| Local production build | COMPLETED AND VERIFIED | `npm run build` passed and generated five route pages, sitemap, robots, and 404. |
+| Existing automated tests | COMPLETED AND VERIFIED | 33 tests passed. |
+| Vercel deployment of latest changes | PENDING USER ACTION | The route pre-render/contrast changes are local and not yet deployed. |
+| Lighthouse / field Core Web Vitals | IMPLEMENTED BUT NOT VERIFIED | Live lab results captured; rerun after deployment. No field INP or CrUX data. |
+| Search Console property, performance, indexing, sitemap submission | PENDING USER ACTION | Connect an authorized Google account through OpenSEO, then inspect the correct property. |
+| Schema validator / Rich Results Test | PENDING USER ACTION | Run against the deployed route HTML; valid JSON-LD does not guarantee rich-result eligibility. |
+| GA4 and conversion tracking | PENDING USER ACTION | No measurement ID or consent approach supplied; do not invent one. |
+| Local SEO | NOT APPLICABLE pending location details | India is confirmed as market, but no city, address, service area, or appointment format is verified. |
+| Off-page outreach | NOT APPLICABLE for this verification pass | No external submissions or outreach performed. |
+
+## Next actions
+
+1. Deploy the current repository changes, then recheck raw HTML and HTTP status on all routes, particularly `/approach`, `/care`, and a nonexistent path.
+2. Connect Search Console through the OpenSEO OAuth flow, confirm the exact production property, inspect coverage and performance, and review the sitemap before submitting it.
+3. Confirm online/in-person availability and the city or service area, then refine the commercial page map without creating unsupported location claims.
+4. Rerun Lighthouse and validate JSON-LD on the deployed pre-rendered pages. Do not treat a sitemap submission as confirmation of indexing or a ranking guarantee.

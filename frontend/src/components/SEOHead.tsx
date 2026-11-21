@@ -54,7 +54,8 @@ export function SEOHead() {
     setMeta('property', 'og:image:alt', `${SITE.name} logo`);
     setMeta('property', 'og:site_name', SITE.name);
     setMeta('property', 'og:locale', SITE.locale);
-    setMeta('name', 'twitter:card', image ? 'summary_large_image' : 'summary');
+    // The verified share asset is the square brand logo, not a landscape card.
+    setMeta('name', 'twitter:card', 'summary');
     setMeta('name', 'twitter:title', page.title);
     setMeta('name', 'twitter:description', page.description);
     setMeta('name', 'twitter:image', image);
