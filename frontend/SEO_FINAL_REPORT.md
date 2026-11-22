@@ -6,7 +6,7 @@ Limited Spoon Wellness is a founder-led nutrition practice led by Shalini Selvak
 
 ## Verdict
 
-The deployed production site has five crawlable pages, route-specific pre-rendered content and SEO metadata, split page bundles, working robots and sitemap files, and a real HTTP 404 for unknown paths. The latest post-deploy crawl found 0 crawler issues. A successful Lighthouse run after the logo and contrast changes reported SEO 100 and accessibility 100 for every returned secondary-page sample, with effectively zero CLS. The further bundle-splitting change is deployed, but its Lighthouse rerun could not complete because OpenSEO reported insufficient provider credits. Search performance and indexing cannot yet be assessed because no authorized Search Console account is connected.
+The deployed production site has five crawlable pages, route-specific pre-rendered content and SEO metadata, split page bundles, working robots and sitemap files, and a real HTTP 404 for unknown paths. The latest post-deploy crawl found 0 crawler issues. A successful Lighthouse run after the logo and contrast changes reported SEO 100 and accessibility 100 for every returned secondary-page sample, with effectively zero CLS. The further bundle-splitting change is deployed, but its Lighthouse rerun could not complete because OpenSEO reported insufficient provider credits. Search Console access was available in the user's authenticated browser session for direct indexing operations; OpenSEO's separate OAuth connection is still unlinked.
 
 ## Route inventory and indexation
 
@@ -24,7 +24,7 @@ No authentication, private dashboard, API, pagination, product, article, or loca
 
 ## Search visibility and keyword strategy
 
-The India domain overview and ranked-keyword sample returned no measurable organic traffic or ranked keywords; the backlink provider found no referring domains. These are third-party estimates and may miss a new or low-volume site. Four Google India SERP snapshots did not show Limited Spoon in the first 20 results for PCOS nutritionist India, online dietitian India, nutritionist for diabetes India, and prenatal nutritionist India. Sampled competitors included pcosdietician.in (#6 for PCOS), medindia.net (#2 for online dietitian), and momkidcare.com (#1 for prenatal nutrition). These are snapshots, not Search Console positions.
+The India domain overview and ranked-keyword sample returned no measurable organic traffic or ranked keywords; the backlink provider found no referring domains. These are third-party estimates and may miss a new or low-volume site. A focused Google India desktop SERP check on 22 Nov 2026 found the homepage for `site:limitedspoon.online` at position 1 in all three reads, evidence that at least one page is discoverable. The domain search returned the About page at position 1 in one of three reads. The site did not appear in the first 10 for `limitedspoon`, `limitedspoon wellness`, `Limited Spoon Wellness`, or for PCOS nutritionist India, nutritionist for diabetes India, and pregnancy nutritionist India. Brand variations are currently ambiguous in search. These are volatile samples, not Search Console positions.
 
 | India query | Est. monthly volume | Intent | Page mapping |
 |---|---:|---|---|
@@ -39,6 +39,7 @@ Metrics are provider estimates, not expected traffic. No search volumes are inve
 
 - Production origin is exactly https://www.limitedspoon.online; the production build rejects an absent or mismatched VITE_SITE_URL.
 - Five public route HTML files are pre-rendered. Each has unique title, description, self-canonical, robots policy, Open Graph/Twitter URLs, and matching Organization, WebSite, and WebPage JSON-LD where applicable.
+- The homepage title now leads with the brand and includes the domain-derived `LimitedSpoon` spelling; Organization JSON-LD declares `LimitedSpoon` as an alternate name to reinforce brand/entity matching. This is a relevance signal, not a ranking guarantee.
 - React hydrates the pre-rendered markup; unknown routes use a generated noindex,follow 404 document.
 - /robots.txt returns 200 and references https://www.limitedspoon.online/sitemap.xml.
 - /sitemap.xml returns 200 and contains exactly the five canonical www URLs; no speculative lastmod values are included.
@@ -67,9 +68,9 @@ These are lab results, not field Core Web Vitals. INP was not returned. After th
 
 ## Google Search Console
 
-PENDING USER ACTION: OpenSEO has no connected Google account with Search Console access. Property ownership, clicks, impressions, CTR, position, indexing coverage, URL inspections, and existing sitemap submission status therefore remain unknown. No sitemap submission or indexing request is claimed.
+COMPLETED AND VERIFIED (submission/queue only): In the authenticated Google Search Console `limitedspoon.online` domain property, submitted `https://www.limitedspoon.online/sitemap.xml`. The Sitemaps table showed Status `Success`, Last read 21 Nov 2026, and 5 discovered pages. URL Inspection reported the homepage and `/care` as unknown to Google before the live tests; `/approach` and `/about` were `Discovered - currently not indexed`; `/contact` was unknown to Google at inspection time. Live URL tests succeeded for all five indexable public pages. Search Console accepted priority crawl requests for the homepage, `/care`, `/approach`, `/contact`, and `/about` and confirmed each request was added to its queue. These confirmations do not establish that Google has indexed the pages. Recheck Pages/URL Inspection after Google recrawls.
 
-Connect Google through the official OAuth flow in [OpenSEO Search Performance](https://app.openseo.so/p/103588e8-a4f5-49a2-854c-652587cd223a/search-performance). Do not send credentials in chat. Once connected, select the confirmed https://www.limitedspoon.online/ URL-prefix property or verified domain property; review the existing sitemap before submitting https://www.limitedspoon.online/sitemap.xml, then inspect the homepage, /care, /approach, and /contact.
+Search Console performance data was not available in the newly configured property; no clicks, impressions, CTR, rankings, or trends are claimed. OpenSEO's separate Search Console OAuth remains unlinked. The browser-based Google Search Console operations above were completed directly.
 
 ## Analytics, local, and off-page SEO
 
@@ -93,8 +94,9 @@ Connect Google through the official OAuth flow in [OpenSEO Search Performance](h
 | Per-route JavaScript code splitting | COMPLETED AND VERIFIED | Vercel deployed the split build; production crawl remains clean; local build shows smaller entry bundle and page chunks |
 | Lighthouse after final bundle split | BLOCKED | OpenSEO/DataForSEO returned INSUFFICIENT_CREDITS for 9 samples and timeout for 1; earlier Lighthouse run is reported above |
 | Current local production build, lint, and tests | COMPLETED AND VERIFIED | Build and lint passed; 33 existing tests passed |
-| Search Console connection, indexing, performance, sitemap submission | PENDING USER ACTION | Authorized OAuth account must be connected first |
-| Schema validator and Rich Results Test | PENDING USER ACTION | External validation not run |
+| Search Console sitemap submission and five URL indexing requests | COMPLETED AND VERIFIED | Sitemap `Success`, 5 discovered pages; all five live tests were eligible and queue confirmations were shown |
+| Google indexing completion and performance reporting | IMPLEMENTED BUT NOT VERIFIED | Requests are queued; Google has not confirmed indexing and usable query/performance data is not yet available |
+| Schema.org Validator and Rich Results Test | COMPLETED AND VERIFIED | Schema.org validation returned zero errors/warnings on all five URLs; Google's homepage Rich Results Test found no rich-result items |
 | GA4 / conversion events | PENDING USER ACTION | Need authorized measurement property and consent details |
 
 ## Changed files in this follow-up
@@ -104,11 +106,13 @@ Connect Google through the official OAuth flow in [OpenSEO Search Performance](h
 - public/brand/logo-*.webp — content-versioned responsive logo derivatives.
 - vercel.json — long-lived immutable caching for brand assets.
 - src/App.tsx, scripts/generate-seo-assets.mjs — split browser route bundles while preserving streamed static prerendering.
+- src/config/page-seo.json, src/components/SEOHead.tsx, scripts/generate-seo-assets.mjs — place homepage brand first and add `LimitedSpoon` as the Organization alternate name for static and client-rendered metadata.
 - SEO_PROJECT_ANALYSIS.md, SEO_FINAL_REPORT.md — verified deployment findings and updated Lighthouse evidence.
 
 ## Next actions
 
 1. Re-run Lighthouse when the OpenSEO/DataForSEO provider has credits available; use field data in Search Console/CrUX when it becomes available.
-2. Connect Search Console using OpenSEO OAuth; inspect exact property, sitemap, URL indexing, and query/page performance.
-3. Confirm appointment format and service area before adding commercial/local landing pages or LocalBusiness data.
-4. Supply the GA4 property and consent requirements if conversion measurement is wanted.
+2. Recheck Search Console's Pages report and URL Inspection to confirm when Google processes the queued crawl requests; do not resubmit URLs repeatedly.
+3. Optionally connect Search Console through OpenSEO OAuth to bring first-party performance data into OpenSEO; direct Google Search Console submission is already complete.
+4. Confirm appointment format and service area before adding commercial/local landing pages or LocalBusiness data.
+5. Supply the GA4 property and consent requirements if conversion measurement is wanted.

@@ -79,6 +79,7 @@ export function SEOHead() {
           '@type': 'Organization',
           '@id': `${origin}/#organization`,
           name: SITE.name,
+          alternateName: 'LimitedSpoon',
           url: origin,
           description: SITE.description,
           logo: `${origin}/brand/logo.png`,

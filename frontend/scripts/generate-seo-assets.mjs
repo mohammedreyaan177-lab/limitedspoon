@@ -110,6 +110,7 @@ for (const route of routes) {
         '@type': 'Organization',
         '@id': `${origin}/#organization`,
         name: 'Limited Spoon Wellness',
+        alternateName: 'LimitedSpoon',
         url: origin,
         description: 'Limited Spoon Wellness is a nutritional and dietetic centre offering personalised nutrition care — from weight management and PCOS to diabetes, pre & post-natal, geriatric and cardiopulmonary nutrition.',
         logo: image,
