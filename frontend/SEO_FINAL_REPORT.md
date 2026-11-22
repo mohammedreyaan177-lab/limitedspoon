@@ -39,7 +39,7 @@ Metrics are provider estimates, not expected traffic. No search volumes are inve
 
 - Production origin is exactly https://www.limitedspoon.online; the production build rejects an absent or mismatched VITE_SITE_URL.
 - Five public route HTML files are pre-rendered. Each has unique title, description, self-canonical, robots policy, Open Graph/Twitter URLs, and matching Organization, WebSite, and WebPage JSON-LD where applicable.
-- The homepage title now leads with the brand and includes the domain-derived `LimitedSpoon` spelling; Organization JSON-LD declares `LimitedSpoon` as an alternate name to reinforce brand/entity matching. This is a relevance signal, not a ranking guarantee.
+- The homepage retains its original `Personalised Nutrition Care — Limited Spoon Wellness` title. Organization JSON-LD declares the domain-derived `LimitedSpoon` spelling as an alternate name to reinforce brand/entity matching without replacing the existing title wording. This is a relevance signal, not a ranking guarantee.
 - React hydrates the pre-rendered markup; unknown routes use a generated noindex,follow 404 document.
 - /robots.txt returns 200 and references https://www.limitedspoon.online/sitemap.xml.
 - /sitemap.xml returns 200 and contains exactly the five canonical www URLs; no speculative lastmod values are included.
